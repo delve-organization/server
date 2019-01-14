@@ -6,11 +6,11 @@
 
     <parent>
         <groupId>com.github.delve-organization</groupId>
-        <artifactId>delve-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <artifactId>parent</artifactId>
+        <version>master-SNAPSHOT</version>
     </parent>
 
-    <artifactId>delve-server</artifactId>
+    <artifactId>server</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -141,4 +141,10 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 </project>
