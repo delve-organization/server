@@ -1,0 +1,5 @@
+= Database architecture
+
+*Relation schema*
+
+image::relation_schema.png[]

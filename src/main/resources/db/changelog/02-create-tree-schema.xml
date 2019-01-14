@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="02" author="pipiczistvan">
+        <createTable tableName="tree" remarks="A table that represents a tree">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="root_node_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="accessibility" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="tree" baseColumnNames="root_node_id"
+                                 constraintName="tree_root_node_id_fk"
+                                 referencedTableName="node" referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
