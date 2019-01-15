@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.github.delve-organization</groupId>
         <artifactId>parent</artifactId>
-        <version>master-SNAPSHOT</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>server</artifactId>
@@ -16,6 +16,8 @@
 
     <properties>
         <line.coverage.threshold>0.80</line.coverage.threshold>
+        <coveralls-maven-plugin.version>4.2.0</coveralls-maven-plugin.version>
+        <coveralls-repo-token>bfDCCSOhsGCqzn4KNx8qdDVxI46GPQEg8</coveralls-repo-token>
     </properties>
 
     <dependencies>
@@ -138,13 +140,30 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>${coveralls-maven-plugin.version}</version>
+                <configuration>
+                    <repoToken>${coveralls-repo-token}</repoToken>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
     <repositories>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
+            <id>rasputin-public-repository</id>
+            <url>http://rsptn.ddns.net:5550</url>
         </repository>
     </repositories>
 </project>
