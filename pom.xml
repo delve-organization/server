@@ -147,15 +147,6 @@
                 <configuration>
                     <repoToken>${coveralls-repo-token}</repoToken>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>report</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
