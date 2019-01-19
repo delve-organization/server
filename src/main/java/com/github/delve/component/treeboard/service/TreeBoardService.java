@@ -39,7 +39,7 @@ public class TreeBoardService {
         final UserPrinciple user = UserUtil.currentUser();
         final TreeDto tree = treeService.findById(command.treeId);
         if (!tree.editable && !PUBLIC.equals(tree.accessibility)) {
-            throw new IllegalStateException(String.format("Can not save tree board for tree id %s, because tree is not public and user is not owner of the tree.", tree.id));
+            throw new IllegalStateException(String.format("Can not saveFile tree board for tree id %s, because tree is not public and user is not owner of the tree.", tree.id));
         }
 
         final TreeBoard newTreeBoard = new TreeBoard(command.treeId, command.title, command.description,
