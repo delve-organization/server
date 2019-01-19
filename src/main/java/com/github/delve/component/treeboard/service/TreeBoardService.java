@@ -56,6 +56,16 @@ public class TreeBoardService {
                 .collect(Collectors.toList());
     }
 
+    public TreeBoardDto findById(final Long treeBoardId) {
+        final UserPrinciple user = UserUtil.currentUser();
+        final Optional<TreeBoard> optionalTreeBoard = treeBoardRepository.findById(treeBoardId);
+        if (!optionalTreeBoard.isPresent()) {
+            throw new IllegalStateException(String.format("Could not find tree board for id: %s.", treeBoardId));
+        }
+
+        return createDto(optionalTreeBoard.get(), user);
+    }
+
     public void delete(final DeleteTreeBoardCommand command) {
         final UserPrinciple user = UserUtil.currentUser();
         final Optional<TreeBoard> optionalTreeBoard = treeBoardRepository.findById(command.treeBoardId);

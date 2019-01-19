@@ -33,8 +33,9 @@ public class TreeBoardController {
     }
 
     @PostMapping("/create")
-    public void create(@Valid @RequestBody final CreateTreeBoardCommand request) {
-        treeBoardService.save(request);
+    public TreeBoardDto create(@Valid @RequestBody final CreateTreeBoardCommand request) {
+        final Long savedTreeBoardId = treeBoardService.save(request);
+        return treeBoardService.findById(savedTreeBoardId);
     }
 
     @PostMapping("/delete")
