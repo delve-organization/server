@@ -1,21 +1,24 @@
 package com.github.delve.integrationtest.treeboard.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.delve.component.treeboard.dto.CreateTreeBoardCommand;
 import com.github.delve.component.treeboard.dto.DeleteTreeBoardCommand;
+import com.github.delve.dev.JwtAuthenticator;
+import com.github.delve.integrationtest.SpringBootTestBase;
 import com.github.delve.integrationtest.treeboard.util.TreeBoardBaseData;
 import com.github.delve.integrationtest.user.util.UserBaseData;
-import com.github.delve.integrationtest.util.basedata.UseBaseData;
-import com.github.delve.integrationtest.SpringBootTestBase;
 import com.github.delve.integrationtest.util.auth.Authenticate;
-import com.github.delve.dev.JwtAuthenticator;
 import com.github.delve.integrationtest.util.basedata.Preload;
+import com.github.delve.integrationtest.util.basedata.UseBaseData;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.github.delve.common.domain.Accessibility.PUBLIC;
 import static com.github.delve.dev.TreeBoardTestData.TREE_BOARD_0_ID;
+import static com.github.delve.dev.TreeTestData.TREE_0_ID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,6 +43,21 @@ public class TreeBoardControllerTest extends SpringBootTestBase {
         mvc.perform(get("/api/tree-board/all-available")
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @Preload(UserBaseData.class)
+    @Authenticate(username = "user", password = "password")
+    @UseBaseData(TreeBoardBaseData.class)
+    public void create() throws Exception {
+        final String token = jwtAuthenticator.generateToken();
+        final CreateTreeBoardCommand request = new CreateTreeBoardCommand(TREE_0_ID, "Title", "Description", "fat_cat.png", "red", PUBLIC);
+
+        mvc.perform(post("/api/tree-board/create")
+                .header("Authorization", "Bearer " + token)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 

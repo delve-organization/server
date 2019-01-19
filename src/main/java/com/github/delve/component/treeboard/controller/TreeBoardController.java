@@ -1,8 +1,9 @@
 package com.github.delve.component.treeboard.controller;
 
-import com.github.delve.component.treeboard.service.TreeBoardService;
+import com.github.delve.component.treeboard.dto.CreateTreeBoardCommand;
 import com.github.delve.component.treeboard.dto.DeleteTreeBoardCommand;
 import com.github.delve.component.treeboard.dto.TreeBoardDto;
+import com.github.delve.component.treeboard.service.TreeBoardService;
 import com.github.delve.config.RestApiController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +30,11 @@ public class TreeBoardController {
     @GetMapping("/all-available")
     public List<TreeBoardDto> getAllAvailableTreeBoards() {
         return treeBoardService.findAllAvailable();
+    }
+
+    @PostMapping("/create")
+    public void create(@Valid @RequestBody final CreateTreeBoardCommand request) {
+        treeBoardService.save(request);
     }
 
     @PostMapping("/delete")
