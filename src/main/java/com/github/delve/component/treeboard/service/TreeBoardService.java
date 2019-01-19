@@ -80,8 +80,7 @@ public class TreeBoardService {
     }
 
     private TreeBoardDto createDto(final TreeBoard treeBoard, final UserPrinciple user) {
-        final boolean editable = isAdmin(user)
-                || user.getId().equals(treeBoard.getOwnerId());
+        final boolean editable = isAdmin(user) || user.getId().equals(treeBoard.getOwnerId());
         final String imageUrl = MvcUrlCreator.imageUrl(treeBoard.getImageName());
 
         return new TreeBoardDto(treeBoard.getId(), treeBoard.getTreeId(), treeBoard.getTitle(),

@@ -21,9 +21,9 @@ public class TreeController {
         this.treeService = treeService;
     }
 
-    @GetMapping("/all")
-    public List<TreeDto> getAllTrees() {
-        return treeService.findAll();
+    @GetMapping("/all-available")
+    public List<TreeDto> getAllAvailableTrees() {
+        return treeService.findAllAvailable();
     }
 
     @GetMapping("/id/{treeId}")

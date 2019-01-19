@@ -46,9 +46,13 @@ public class TreeService {
         return treeRepository.save(newTree).getId();
     }
 
-    public List<TreeDto> findAll() {
+    public List<TreeDto> findAllAvailable() {
         final UserPrinciple user = UserUtil.currentUser();
-        return treeRepository.findAll().stream().map(tree -> this.createDto(tree, user)).collect(Collectors.toList());
+        final List<Accessibility> accessibilities = isAdmin(user) ? asList(Accessibility.values()) : singletonList(PUBLIC);
+
+        return treeRepository.findAllByUserAndAccessibility(user.getId(), accessibilities).stream()
+                .map(tree -> this.createDto(tree, user))
+                .collect(Collectors.toList());
     }
 
     public TreeDto findById(final Long treeId) {
@@ -65,7 +69,7 @@ public class TreeService {
     }
 
     private TreeDto createDto(final Tree tree, final UserPrinciple user) {
-        final boolean editable = user.getAuthorities().contains(ADMIN_AUTHORITY) || tree.getOwnerId().equals(user.getId());
+        final boolean editable = isAdmin(user) || tree.getOwnerId().equals(user.getId());
 
         return new TreeDto(tree.getId(), tree.getRootNode().getId(), tree.getTitle(), editable, tree.getAccessibility());
     }

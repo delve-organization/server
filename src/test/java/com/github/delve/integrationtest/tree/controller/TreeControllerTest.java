@@ -28,10 +28,10 @@ public class TreeControllerTest extends SpringBootTestBase {
     @Preload(UserBaseData.class)
     @Authenticate(username = "user", password = "password")
     @UseBaseData(TreeBaseData.class)
-    public void getAllTrees() throws Exception {
+    public void getAllAvailableTrees() throws Exception {
         final String token = jwtAuthenticator.generateToken();
 
-        mvc.perform(get("/api/tree/all")
+        mvc.perform(get("/api/tree//all-available")
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static com.github.delve.common.domain.Accessibility.PRIVATE;
+import static com.github.delve.common.domain.Accessibility.PUBLIC;
 import static com.github.delve.dev.NodeTestData.ROOT_ID;
 import static com.github.delve.dev.TreeTestData.TREE_1_ID;
 import static org.junit.Assert.assertEquals;
@@ -39,7 +40,7 @@ public class TreeServiceTest extends SpringBootTestBase {
     @UseBaseData(NodeBaseData.class)
     public void saveTree() {
         final Long savedTreeId = treeService.save(new CreateTreeCommand(ROOT_ID, "Scifi or Fantasy", PRIVATE));
-        final List<TreeDto> savedTrees = treeService.findAll();
+        final List<TreeDto> savedTrees = treeService.findAllAvailable();
 
         assertEquals(savedTrees.size(), 1);
         assertThat(savedTrees.get(0), TreeDtoMatcher.treeDto()
@@ -59,7 +60,7 @@ public class TreeServiceTest extends SpringBootTestBase {
         final Long savedTreeId = treeService.save(new CreateTreeCommand(ROOT_ID, "Scifi or Fantasy", PRIVATE));
 
         jwtAuthenticator.authenticate("admin", "password");
-        final List<TreeDto> savedTrees = treeService.findAll();
+        final List<TreeDto> savedTrees = treeService.findAllAvailable();
         assertEquals(savedTrees.size(), 1);
         assertThat(savedTrees.get(0), TreeDtoMatcher.treeDto().isEditable(true));
 
@@ -70,10 +71,10 @@ public class TreeServiceTest extends SpringBootTestBase {
     @UseBaseData({UserBaseData.class, NodeBaseData.class})
     public void otherUserCannotEdit() {
         jwtAuthenticator.authenticate("admin", "password");
-        final Long savedTreeId = treeService.save(new CreateTreeCommand(ROOT_ID, "Scifi or Fantasy", PRIVATE));
+        final Long savedTreeId = treeService.save(new CreateTreeCommand(ROOT_ID, "Scifi or Fantasy", PUBLIC));
 
         jwtAuthenticator.authenticate("user", "password");
-        final List<TreeDto> savedTrees = treeService.findAll();
+        final List<TreeDto> savedTrees = treeService.findAllAvailable();
         assertEquals(savedTrees.size(), 1);
         assertThat(savedTrees.get(0), TreeDtoMatcher.treeDto().isEditable(false));
 

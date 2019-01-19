@@ -2,6 +2,7 @@ package com.github.delve.component.tree.repository;
 
 import com.github.delve.common.domain.Accessibility;
 import com.github.delve.component.tree.domain.Tree;
+import com.github.delve.component.treeboard.domain.TreeBoard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,4 +23,10 @@ public interface TreeRepository extends JpaRepository<Tree, Long> {
             @Param("userId") final Long userId,
             @Param("accessibilities") final Collection<Accessibility> accessibilities);
 
+    @Query("select tree from Tree tree " +
+            "where tree.ownerId = :userId " +
+            "or tree.accessibility in (:accessibilities) ")
+    Collection<Tree> findAllByUserAndAccessibility(
+            @Param("userId") final Long userId,
+            @Param("accessibilities") final Collection<Accessibility> accessibilities);
 }

@@ -16,5 +16,4 @@ public interface TreeBoardRepository extends JpaRepository<TreeBoard, Long> {
     Collection<TreeBoard> findAllByUserAndAccessibility(
             @Param("userId") final Long userId,
             @Param("accessibilities") final Collection<Accessibility> accessibilities);
-
 }
