@@ -118,6 +118,13 @@ public class UserServiceTest extends SpringBootTestBase {
         assertFalse(adminExists);
     }
 
+    @Test
+    @UseBaseData(UserBaseData.class)
+    public void getUserNameById() {
+        final String adminName = userService.getUserNameById(ADMIN_ID);
+        assertEquals(adminName, "Admin");
+    }
+
     private UserDto userToDto(final User user) {
         return new UserDto(user.getId(), user.getName(), user.getUsername(), user.getEmail(),
                 user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));

@@ -33,6 +33,10 @@ public class UserService {
         this.encoder = encoder;
     }
 
+    public String getUserNameById(final Long userId) {
+        return userRepository.getUserNameById(userId);
+    }
+
     public Boolean existsByUsername(final String username) {
         return userRepository.existsByUsername(username);
     }

@@ -11,6 +11,7 @@ import com.github.delve.component.treeboard.dto.EditTreeBoardCommand;
 import com.github.delve.component.treeboard.dto.TreeBoardDto;
 import com.github.delve.component.treeboard.repository.TreeBoardRepository;
 import com.github.delve.security.service.user.UserPrinciple;
+import com.github.delve.security.service.user.UserService;
 import com.github.delve.security.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,11 +30,13 @@ public class TreeBoardService {
 
     private final TreeBoardRepository treeBoardRepository;
     private final TreeService treeService;
+    private final UserService userService;
 
     @Autowired
-    public TreeBoardService(final TreeBoardRepository treeBoardRepository, final TreeService treeService) {
+    public TreeBoardService(final TreeBoardRepository treeBoardRepository, final TreeService treeService, final UserService userService) {
         this.treeBoardRepository = treeBoardRepository;
         this.treeService = treeService;
+        this.userService = userService;
     }
 
     public Long save(final CreateTreeBoardCommand command) {
@@ -85,11 +88,12 @@ public class TreeBoardService {
     private TreeBoardDto createDto(final TreeBoard treeBoard, final UserPrinciple user) {
         final boolean editable = isAdmin(user) || user.getId().equals(treeBoard.getOwnerId());
         final String imageUrl = MvcUrlCreator.imageUrl(treeBoard.getImageName());
+        final String ownerName = userService.getUserNameById(treeBoard.getOwnerId());
 
         return new TreeBoardDto(
                 treeBoard.getId(), treeBoard.getTreeId(), treeBoard.getTitle(),
                 treeBoard.getDescription(), treeBoard.getImageName(), imageUrl, treeBoard.getColor(),
-                treeBoard.getAccessibility(), editable);
+                treeBoard.getAccessibility(), editable, ownerName);
     }
 
     private TreeBoard tryToFindByIdForEdit(final Long treeBoardId) {

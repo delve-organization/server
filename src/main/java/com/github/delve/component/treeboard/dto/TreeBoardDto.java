@@ -13,9 +13,11 @@ public class TreeBoardDto {
     public final String color;
     public final Accessibility accessibility;
     public final boolean editable;
+    public final String ownerName;
 
     public TreeBoardDto(final Long id, final Long treeId, final String title, final String description, final String image,
-                        final String imageUrl, final String color, final Accessibility accessibility, final boolean editable) {
+                        final String imageUrl, final String color, final Accessibility accessibility, final boolean editable,
+                        final String ownerName) {
         this.id = id;
         this.treeId = treeId;
         this.title = title;
@@ -25,5 +27,6 @@ public class TreeBoardDto {
         this.color = color;
         this.accessibility = accessibility;
         this.editable = editable;
+        this.ownerName = ownerName;
     }
 }

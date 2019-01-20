@@ -20,6 +20,7 @@ public class TreeBoardDtoMatcher extends DelveTypeSafeMatcher<TreeBoardDto> {
     private Matcher<String> color = any(String.class);
     private Matcher<Accessibility> accessibility = any(Accessibility.class);
     private Matcher<Boolean> editable = any(Boolean.class);
+    private Matcher<String> ownerName = any(String.class);
 
     public static TreeBoardDtoMatcher treeBoardDto() {
         return new TreeBoardDtoMatcher();
@@ -35,7 +36,8 @@ public class TreeBoardDtoMatcher extends DelveTypeSafeMatcher<TreeBoardDto> {
                 imageUrl.matches(item.imageUrl) &&
                 color.matches(item.color) &&
                 accessibility.matches(item.accessibility) &&
-                editable.matches(item.editable);
+                editable.matches(item.editable) &&
+                ownerName.matches(item.ownerName);
     }
 
     @Override
@@ -57,6 +59,8 @@ public class TreeBoardDtoMatcher extends DelveTypeSafeMatcher<TreeBoardDto> {
         this.accessibility.describeTo(expectedDescription);
         expectedDescription.appendText(", ");
         this.editable.describeTo(expectedDescription);
+        expectedDescription.appendText(", ");
+        this.ownerName.describeTo(expectedDescription);
     }
 
     @Override
@@ -70,7 +74,8 @@ public class TreeBoardDtoMatcher extends DelveTypeSafeMatcher<TreeBoardDto> {
                 .appendText("imageUrl: ").appendValue(item.imageUrl)
                 .appendText("color: ").appendValue(item.color)
                 .appendText("accessibility: ").appendValue(item.accessibility)
-                .appendText("editable: ").appendValue(item.editable);
+                .appendText("editable: ").appendValue(item.editable)
+                .appendText("ownerName: ").appendValue(item.ownerName);
     }
 
     public TreeBoardDtoMatcher hasId(final Long id) {
@@ -115,6 +120,11 @@ public class TreeBoardDtoMatcher extends DelveTypeSafeMatcher<TreeBoardDto> {
 
     public TreeBoardDtoMatcher isEditable(final Boolean editable) {
         this.editable = is("editable", editable);
+        return this;
+    }
+
+    public TreeBoardDtoMatcher hasOwnerName(final String ownerName) {
+        this.ownerName = is("ownerName", ownerName);
         return this;
     }
 }
