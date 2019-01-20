@@ -86,8 +86,10 @@ public class TreeBoardService {
         final boolean editable = isAdmin(user) || user.getId().equals(treeBoard.getOwnerId());
         final String imageUrl = MvcUrlCreator.imageUrl(treeBoard.getImageName());
 
-        return new TreeBoardDto(treeBoard.getId(), treeBoard.getTreeId(), treeBoard.getTitle(),
-                treeBoard.getDescription(), imageUrl, treeBoard.getColor(), editable);
+        return new TreeBoardDto(
+                treeBoard.getId(), treeBoard.getTreeId(), treeBoard.getTitle(),
+                treeBoard.getDescription(), treeBoard.getImageName(), imageUrl, treeBoard.getColor(),
+                treeBoard.getAccessibility(), editable);
     }
 
     private TreeBoard tryToFindByIdForEdit(final Long treeBoardId) {

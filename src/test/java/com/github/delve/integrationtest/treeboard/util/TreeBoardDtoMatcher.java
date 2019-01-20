@@ -1,11 +1,12 @@
 package com.github.delve.integrationtest.treeboard.util;
 
+import com.github.delve.common.domain.Accessibility;
 import com.github.delve.component.treeboard.dto.TreeBoardDto;
-import com.github.delve.integrationtest.util.matcher.DelveMatcher;
 import com.github.delve.integrationtest.util.matcher.DelveTypeSafeMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
+import static com.github.delve.integrationtest.util.matcher.DelveMatcher.is;
 import static org.hamcrest.Matchers.any;
 
 public class TreeBoardDtoMatcher extends DelveTypeSafeMatcher<TreeBoardDto> {
@@ -14,8 +15,10 @@ public class TreeBoardDtoMatcher extends DelveTypeSafeMatcher<TreeBoardDto> {
     private Matcher<Long> treeId = any(Long.class);
     private Matcher<String> title = any(String.class);
     private Matcher<String> description = any(String.class);
+    private Matcher<String> image = any(String.class);
     private Matcher<String> imageUrl = any(String.class);
     private Matcher<String> color = any(String.class);
+    private Matcher<Accessibility> accessibility = any(Accessibility.class);
     private Matcher<Boolean> editable = any(Boolean.class);
 
     public static TreeBoardDtoMatcher treeBoardDto() {
@@ -28,8 +31,10 @@ public class TreeBoardDtoMatcher extends DelveTypeSafeMatcher<TreeBoardDto> {
                 treeId.matches(item.treeId) &&
                 title.matches(item.title) &&
                 description.matches(item.description) &&
+                image.matches(item.image) &&
                 imageUrl.matches(item.imageUrl) &&
                 color.matches(item.color) &&
+                accessibility.matches(item.accessibility) &&
                 editable.matches(item.editable);
     }
 
@@ -43,9 +48,13 @@ public class TreeBoardDtoMatcher extends DelveTypeSafeMatcher<TreeBoardDto> {
         expectedDescription.appendText(", ");
         this.description.describeTo(expectedDescription);
         expectedDescription.appendText(", ");
+        this.image.describeTo(expectedDescription);
+        expectedDescription.appendText(", ");
         this.imageUrl.describeTo(expectedDescription);
         expectedDescription.appendText(", ");
         this.color.describeTo(expectedDescription);
+        expectedDescription.appendText(", ");
+        this.accessibility.describeTo(expectedDescription);
         expectedDescription.appendText(", ");
         this.editable.describeTo(expectedDescription);
     }
@@ -57,43 +66,55 @@ public class TreeBoardDtoMatcher extends DelveTypeSafeMatcher<TreeBoardDto> {
                 .appendText("treeId: ").appendValue(item.treeId).appendText(", ")
                 .appendText("title: ").appendValue(item.title)
                 .appendText("description: ").appendValue(item.description)
+                .appendText("image: ").appendValue(item.image)
                 .appendText("imageUrl: ").appendValue(item.imageUrl)
                 .appendText("color: ").appendValue(item.color)
+                .appendText("accessibility: ").appendValue(item.accessibility)
                 .appendText("editable: ").appendValue(item.editable);
     }
 
     public TreeBoardDtoMatcher hasId(final Long id) {
-        this.id = DelveMatcher.is("id", id);
+        this.id = is("id", id);
         return this;
     }
 
     public TreeBoardDtoMatcher hasTreeId(final Long treeId) {
-        this.treeId = DelveMatcher.is("treeId", treeId);
+        this.treeId = is("treeId", treeId);
         return this;
     }
 
     public TreeBoardDtoMatcher hasTitle(final String title) {
-        this.title = DelveMatcher.is("title", title);
+        this.title = is("title", title);
         return this;
     }
 
     public TreeBoardDtoMatcher hasDescription(final String description) {
-        this.description = DelveMatcher.is("description", description);
+        this.description = is("description", description);
+        return this;
+    }
+
+    public TreeBoardDtoMatcher hasImage(final String image) {
+        this.image = is("image", image);
         return this;
     }
 
     public TreeBoardDtoMatcher hasImageUrl(final String imageUrl) {
-        this.imageUrl = DelveMatcher.is("imageUrl", imageUrl);
+        this.imageUrl = is("imageUrl", imageUrl);
         return this;
     }
 
     public TreeBoardDtoMatcher hasColor(final String color) {
-        this.color = DelveMatcher.is("color", color);
+        this.color = is("color", color);
+        return this;
+    }
+
+    public TreeBoardDtoMatcher hasAccessibility(final Accessibility accessibility) {
+        this.accessibility = is("accessibility", accessibility);
         return this;
     }
 
     public TreeBoardDtoMatcher isEditable(final Boolean editable) {
-        this.editable = DelveMatcher.is("editable", editable);
+        this.editable = is("editable", editable);
         return this;
     }
 }

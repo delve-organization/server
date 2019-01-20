@@ -64,6 +64,7 @@ public class TreeBoardServiceTest extends SpringBootTestBase {
                 .hasTreeId(TREE_0_ID)
                 .hasTitle("Title")
                 .hasDescription("description")
+                .hasImage("scifi_fantasy_books.png")
                 .hasImageUrl("http://localhost/images/scifi_fantasy_books.png")
                 .hasColor("black")
                 .isEditable(true));
@@ -130,8 +131,10 @@ public class TreeBoardServiceTest extends SpringBootTestBase {
                 .hasTreeId(TREE_0_ID)
                 .hasTitle("Tree board title 1")
                 .hasDescription("Tree board description 1")
+                .hasImage("scifi_fantasy_books.png")
                 .hasImageUrl("http://localhost/images/scifi_fantasy_books.png")
                 .hasColor("black")
+                .hasAccessibility(PUBLIC)
                 .isEditable(true));
 
         treeBoardService.edit(new EditTreeBoardCommand(TREE_BOARD_0_ID, TREE_1_ID, "New title", "New description", "fat_cat.png", "yellow", Accessibility.PRIVATE));
@@ -141,8 +144,10 @@ public class TreeBoardServiceTest extends SpringBootTestBase {
                 .hasTreeId(TREE_1_ID)
                 .hasTitle("New title")
                 .hasDescription("New description")
+                .hasImage("fat_cat.png")
                 .hasImageUrl("http://localhost/images/fat_cat.png")
                 .hasColor("yellow")
+                .hasAccessibility(PRIVATE)
                 .isEditable(true));
     }
 
