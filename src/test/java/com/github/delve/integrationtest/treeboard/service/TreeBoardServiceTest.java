@@ -1,18 +1,20 @@
 package com.github.delve.integrationtest.treeboard.service;
 
+import com.github.delve.common.domain.Accessibility;
 import com.github.delve.component.treeboard.dto.CreateTreeBoardCommand;
 import com.github.delve.component.treeboard.dto.DeleteTreeBoardCommand;
+import com.github.delve.component.treeboard.dto.EditTreeBoardCommand;
 import com.github.delve.component.treeboard.dto.TreeBoardDto;
 import com.github.delve.component.treeboard.repository.TreeBoardRepository;
 import com.github.delve.component.treeboard.service.TreeBoardService;
 import com.github.delve.dev.JwtAuthenticator;
+import com.github.delve.integrationtest.SpringBootTestBase;
 import com.github.delve.integrationtest.tree.util.TreeBaseData;
 import com.github.delve.integrationtest.treeboard.util.TreeBoardBaseData;
 import com.github.delve.integrationtest.user.util.UserBaseData;
-import com.github.delve.integrationtest.util.basedata.UseBaseData;
-import com.github.delve.integrationtest.SpringBootTestBase;
 import com.github.delve.integrationtest.util.auth.Authenticate;
 import com.github.delve.integrationtest.util.basedata.Preload;
+import com.github.delve.integrationtest.util.basedata.UseBaseData;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,6 +117,33 @@ public class TreeBoardServiceTest extends SpringBootTestBase {
     @Authenticate(username = "user", password = "password")
     public void treeNotFound() {
         treeBoardService.save(new CreateTreeBoardCommand(TREE_0_ID, "Title", "description", "scifi_fantasy_books.png", "black", PRIVATE));
+    }
+
+    @Test
+    @Preload(UserBaseData.class)
+    @Authenticate(username = "admin", password = "password")
+    @UseBaseData(TreeBoardBaseData.class)
+    public void edit() {
+        final TreeBoardDto initialTreeBoard = treeBoardService.findById(TREE_BOARD_0_ID);
+        assertThat(initialTreeBoard, treeBoardDto()
+                .hasId(TREE_BOARD_0_ID)
+                .hasTreeId(TREE_0_ID)
+                .hasTitle("Tree board title 1")
+                .hasDescription("Tree board description 1")
+                .hasImageUrl("http://localhost/images/scifi_fantasy_books.png")
+                .hasColor("black")
+                .isEditable(true));
+
+        treeBoardService.edit(new EditTreeBoardCommand(TREE_BOARD_0_ID, TREE_1_ID, "New title", "New description", "fat_cat.png", "yellow", Accessibility.PRIVATE));
+        final TreeBoardDto editedTreeBoard = treeBoardService.findById(TREE_BOARD_0_ID);
+        assertThat(editedTreeBoard, treeBoardDto()
+                .hasId(TREE_BOARD_0_ID)
+                .hasTreeId(TREE_1_ID)
+                .hasTitle("New title")
+                .hasDescription("New description")
+                .hasImageUrl("http://localhost/images/fat_cat.png")
+                .hasColor("yellow")
+                .isEditable(true));
     }
 
     @Test

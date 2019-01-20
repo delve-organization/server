@@ -2,6 +2,7 @@ package com.github.delve.component.treeboard.controller;
 
 import com.github.delve.component.treeboard.dto.CreateTreeBoardCommand;
 import com.github.delve.component.treeboard.dto.DeleteTreeBoardCommand;
+import com.github.delve.component.treeboard.dto.EditTreeBoardCommand;
 import com.github.delve.component.treeboard.dto.TreeBoardDto;
 import com.github.delve.component.treeboard.service.TreeBoardService;
 import com.github.delve.config.RestApiController;
@@ -35,6 +36,12 @@ public class TreeBoardController {
     @PostMapping("/create")
     public TreeBoardDto create(@Valid @RequestBody final CreateTreeBoardCommand request) {
         final Long savedTreeBoardId = treeBoardService.save(request);
+        return treeBoardService.findById(savedTreeBoardId);
+    }
+
+    @PostMapping("/edit")
+    public TreeBoardDto edit(@Valid @RequestBody final EditTreeBoardCommand request) {
+        final Long savedTreeBoardId = treeBoardService.edit(request);
         return treeBoardService.findById(savedTreeBoardId);
     }
 

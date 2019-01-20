@@ -3,6 +3,7 @@ package com.github.delve.integrationtest.treeboard.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.delve.component.treeboard.dto.CreateTreeBoardCommand;
 import com.github.delve.component.treeboard.dto.DeleteTreeBoardCommand;
+import com.github.delve.component.treeboard.dto.EditTreeBoardCommand;
 import com.github.delve.dev.JwtAuthenticator;
 import com.github.delve.integrationtest.SpringBootTestBase;
 import com.github.delve.integrationtest.treeboard.util.TreeBoardBaseData;
@@ -55,6 +56,21 @@ public class TreeBoardControllerTest extends SpringBootTestBase {
         final CreateTreeBoardCommand request = new CreateTreeBoardCommand(TREE_0_ID, "Title", "Description", "fat_cat.png", "red", PUBLIC);
 
         mvc.perform(post("/api/tree-board/create")
+                .header("Authorization", "Bearer " + token)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @Preload(UserBaseData.class)
+    @Authenticate(username = "user", password = "password")
+    @UseBaseData(TreeBoardBaseData.class)
+    public void edit() throws Exception {
+        final String token = jwtAuthenticator.generateToken();
+        final EditTreeBoardCommand request = new EditTreeBoardCommand(TREE_BOARD_0_ID, TREE_0_ID, "Title", "Description", "fat_cat.png", "yellow", PUBLIC);
+
+        mvc.perform(post("/api/tree-board/edit")
                 .header("Authorization", "Bearer " + token)
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))

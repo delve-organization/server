@@ -7,6 +7,7 @@ import com.github.delve.component.tree.service.TreeService;
 import com.github.delve.component.treeboard.domain.TreeBoard;
 import com.github.delve.component.treeboard.dto.CreateTreeBoardCommand;
 import com.github.delve.component.treeboard.dto.DeleteTreeBoardCommand;
+import com.github.delve.component.treeboard.dto.EditTreeBoardCommand;
 import com.github.delve.component.treeboard.dto.TreeBoardDto;
 import com.github.delve.component.treeboard.repository.TreeBoardRepository;
 import com.github.delve.security.service.user.UserPrinciple;
@@ -58,25 +59,27 @@ public class TreeBoardService {
 
     public TreeBoardDto findById(final Long treeBoardId) {
         final UserPrinciple user = UserUtil.currentUser();
-        final Optional<TreeBoard> optionalTreeBoard = treeBoardRepository.findById(treeBoardId);
-        if (!optionalTreeBoard.isPresent()) {
-            throw new IllegalStateException(String.format("Could not find tree board for id: %s.", treeBoardId));
-        }
+        final TreeBoard treeBoard = tryToFindById(treeBoardId);
 
-        return createDto(optionalTreeBoard.get(), user);
+        return createDto(treeBoard, user);
+    }
+
+    public Long edit(final EditTreeBoardCommand command) {
+        final TreeBoard treeBoard = tryToFindByIdForEdit(command.treeBoardId);
+
+        treeBoard.setTitle(command.title);
+        treeBoard.setDescription(command.description);
+        treeBoard.setTreeId(command.treeId);
+        treeBoard.setColor(command.color);
+        treeBoard.setImageName(command.imageName);
+        treeBoard.setAccessibility(command.accessibility);
+
+        return treeBoardRepository.save(treeBoard).getId();
     }
 
     public void delete(final DeleteTreeBoardCommand command) {
-        final UserPrinciple user = UserUtil.currentUser();
-        final Optional<TreeBoard> optionalTreeBoard = treeBoardRepository.findById(command.treeBoardId);
-        if (!optionalTreeBoard.isPresent()) {
-            throw new IllegalStateException(String.format("Could not find tree board for id: %s.", command.treeBoardId));
-        }
-        if (!isAdmin(user) && !user.getId().equals(optionalTreeBoard.get().getOwnerId())) {
-            throw new IllegalStateException("Tree board is not owned by user.");
-        }
-
-        treeBoardRepository.delete(optionalTreeBoard.get());
+        final TreeBoard treeBoard = tryToFindByIdForEdit(command.treeBoardId);
+        treeBoardRepository.delete(treeBoard);
     }
 
     private TreeBoardDto createDto(final TreeBoard treeBoard, final UserPrinciple user) {
@@ -85,5 +88,28 @@ public class TreeBoardService {
 
         return new TreeBoardDto(treeBoard.getId(), treeBoard.getTreeId(), treeBoard.getTitle(),
                 treeBoard.getDescription(), imageUrl, treeBoard.getColor(), editable);
+    }
+
+    private TreeBoard tryToFindByIdForEdit(final Long treeBoardId) {
+        final UserPrinciple user = UserUtil.currentUser();
+        final TreeBoard treeBoard = tryToFindById(treeBoardId);
+        checkEditable(treeBoard, user);
+
+        return treeBoard;
+    }
+
+    private TreeBoard tryToFindById(final Long treeBoardId) {
+        final Optional<TreeBoard> optionalTreeBoard = treeBoardRepository.findById(treeBoardId);
+        if (!optionalTreeBoard.isPresent()) {
+            throw new IllegalStateException(String.format("Could not find tree board for id: %s.", treeBoardId));
+        }
+
+        return optionalTreeBoard.get();
+    }
+
+    private void checkEditable(final TreeBoard treeBoard, final UserPrinciple user) {
+        if (!isAdmin(user) && !user.getId().equals(treeBoard.getOwnerId())) {
+            throw new IllegalStateException("Tree board is not owned by user.");
+        }
     }
 }
