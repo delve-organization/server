@@ -60,9 +60,8 @@ public class ImageService {
         final int userTimeHash = user.hashCode() ^ time.hashCode();
 
         final int lastDotIndex = file.lastIndexOf('.');
-        final String fileName = file.substring(0, lastDotIndex);
         final String extension = file.substring(lastDotIndex);
 
-        return fileName + userTimeHash + extension;
+        return userTimeHash + extension;
     }
 }
