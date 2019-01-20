@@ -1,5 +1,7 @@
 package com.github.delve.image.controller;
 
+import com.github.delve.common.util.MvcUrlCreator;
+import com.github.delve.image.dto.ImageUploadDto;
 import com.github.delve.image.dto.SaveImageCommand;
 import com.github.delve.image.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +40,10 @@ public class ImageController {
     @PostMapping("/api/images/upload")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @ResponseBody
-    public ResponseEntity<String> uploadFile(@RequestParam("file") final MultipartFile file) {
-        final String fileName = imageService.saveFile(new SaveImageCommand(file));
-        return ResponseEntity.status(HttpStatus.OK).body(fileName);
+    public ResponseEntity<ImageUploadDto> uploadFile(@RequestParam("file") final MultipartFile file) {
+        final String imageName = imageService.saveFile(new SaveImageCommand(file));
+        final String imageUrl = MvcUrlCreator.imageUrl(imageName);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ImageUploadDto(imageName, imageUrl));
     }
 }
