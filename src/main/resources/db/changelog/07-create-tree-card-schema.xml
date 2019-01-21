@@ -5,7 +5,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="07" author="pipiczistvan">
-        <createTable tableName="tree_board" remarks="A table that represents a tree board">
+        <createTable tableName="tree_card" remarks="A table that represents a tree card">
             <column name="id" type="int" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
@@ -31,12 +31,12 @@
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="tree_board" baseColumnNames="owner_id"
-                                 constraintName="tree_board_owner_id_fk"
+        <addForeignKeyConstraint baseTableName="tree_card" baseColumnNames="owner_id"
+                                 constraintName="tree_card_owner_id_fk"
                                  referencedTableName="user" referencedColumnNames="id"/>
 
-        <addForeignKeyConstraint baseTableName="tree_board" baseColumnNames="tree_id"
-                                 constraintName="tree_board_tree_id_fk"
+        <addForeignKeyConstraint baseTableName="tree_card" baseColumnNames="tree_id"
+                                 constraintName="tree_card_tree_id_fk"
                                  referencedTableName="tree" referencedColumnNames="id"/>
     </changeSet>
 

@@ -1,8 +1,8 @@
-package com.github.delve.component.treeboard.dto;
+package com.github.delve.component.treecard.dto;
 
 import com.github.delve.common.domain.Accessibility;
 
-public class TreeBoardDto {
+public class TreeCardDto {
 
     public final Long id;
     public final Long treeId;
@@ -15,9 +15,9 @@ public class TreeBoardDto {
     public final boolean editable;
     public final String ownerName;
 
-    public TreeBoardDto(final Long id, final Long treeId, final String title, final String description, final String image,
-                        final String imageUrl, final String color, final Accessibility accessibility, final boolean editable,
-                        final String ownerName) {
+    public TreeCardDto(final Long id, final Long treeId, final String title, final String description, final String image,
+                       final String imageUrl, final String color, final Accessibility accessibility, final boolean editable,
+                       final String ownerName) {
         this.id = id;
         this.treeId = treeId;
         this.title = title;

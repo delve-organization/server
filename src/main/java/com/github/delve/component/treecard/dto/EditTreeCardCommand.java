@@ -1,10 +1,10 @@
-package com.github.delve.component.treeboard.dto;
+package com.github.delve.component.treecard.dto;
 
 import com.github.delve.common.domain.Accessibility;
 
-public class EditTreeBoardCommand {
+public class EditTreeCardCommand {
 
-    public Long treeBoardId;
+    public Long treeCardId;
     public Long treeId;
     public String title;
     public String description;
@@ -12,11 +12,11 @@ public class EditTreeBoardCommand {
     public String color;
     public Accessibility accessibility;
 
-    public EditTreeBoardCommand() {
+    public EditTreeCardCommand() {
     }
 
-    public EditTreeBoardCommand(final Long treeBoardId, final Long treeId, final String title, final String description, final String imageName, final String color, final Accessibility accessibility) {
-        this.treeBoardId = treeBoardId;
+    public EditTreeCardCommand(final Long treeCardId, final Long treeId, final String title, final String description, final String imageName, final String color, final Accessibility accessibility) {
+        this.treeCardId = treeCardId;
         this.treeId = treeId;
         this.title = title;
         this.description = description;

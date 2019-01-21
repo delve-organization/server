@@ -1,7 +1,7 @@
-package com.github.delve.integrationtest.treeboard.util;
+package com.github.delve.integrationtest.treecard.util;
 
 import com.github.delve.common.domain.Accessibility;
-import com.github.delve.component.treeboard.dto.TreeBoardDto;
+import com.github.delve.component.treecard.dto.TreeCardDto;
 import com.github.delve.integrationtest.util.matcher.DelveTypeSafeMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -9,7 +9,7 @@ import org.hamcrest.Matcher;
 import static com.github.delve.integrationtest.util.matcher.DelveMatcher.is;
 import static org.hamcrest.Matchers.any;
 
-public class TreeBoardDtoMatcher extends DelveTypeSafeMatcher<TreeBoardDto> {
+public class TreeCardDtoMatcher extends DelveTypeSafeMatcher<TreeCardDto> {
 
     private Matcher<Long> id = any(Long.class);
     private Matcher<Long> treeId = any(Long.class);
@@ -22,12 +22,12 @@ public class TreeBoardDtoMatcher extends DelveTypeSafeMatcher<TreeBoardDto> {
     private Matcher<Boolean> editable = any(Boolean.class);
     private Matcher<String> ownerName = any(String.class);
 
-    public static TreeBoardDtoMatcher treeBoardDto() {
-        return new TreeBoardDtoMatcher();
+    public static TreeCardDtoMatcher treeCardDto() {
+        return new TreeCardDtoMatcher();
     }
 
     @Override
-    protected boolean matchesSafely(final TreeBoardDto item) {
+    protected boolean matchesSafely(final TreeCardDto item) {
         return id.matches(item.id) &&
                 treeId.matches(item.treeId) &&
                 title.matches(item.title) &&
@@ -64,7 +64,7 @@ public class TreeBoardDtoMatcher extends DelveTypeSafeMatcher<TreeBoardDto> {
     }
 
     @Override
-    protected void describeActual(final TreeBoardDto item, final Description actualDescription) {
+    protected void describeActual(final TreeCardDto item, final Description actualDescription) {
         actualDescription
                 .appendText("id: ").appendValue(item.id).appendText(", ")
                 .appendText("treeId: ").appendValue(item.treeId).appendText(", ")
@@ -78,52 +78,52 @@ public class TreeBoardDtoMatcher extends DelveTypeSafeMatcher<TreeBoardDto> {
                 .appendText("ownerName: ").appendValue(item.ownerName);
     }
 
-    public TreeBoardDtoMatcher hasId(final Long id) {
+    public TreeCardDtoMatcher hasId(final Long id) {
         this.id = is("id", id);
         return this;
     }
 
-    public TreeBoardDtoMatcher hasTreeId(final Long treeId) {
+    public TreeCardDtoMatcher hasTreeId(final Long treeId) {
         this.treeId = is("treeId", treeId);
         return this;
     }
 
-    public TreeBoardDtoMatcher hasTitle(final String title) {
+    public TreeCardDtoMatcher hasTitle(final String title) {
         this.title = is("title", title);
         return this;
     }
 
-    public TreeBoardDtoMatcher hasDescription(final String description) {
+    public TreeCardDtoMatcher hasDescription(final String description) {
         this.description = is("description", description);
         return this;
     }
 
-    public TreeBoardDtoMatcher hasImage(final String image) {
+    public TreeCardDtoMatcher hasImage(final String image) {
         this.image = is("image", image);
         return this;
     }
 
-    public TreeBoardDtoMatcher hasImageUrl(final String imageUrl) {
+    public TreeCardDtoMatcher hasImageUrl(final String imageUrl) {
         this.imageUrl = is("imageUrl", imageUrl);
         return this;
     }
 
-    public TreeBoardDtoMatcher hasColor(final String color) {
+    public TreeCardDtoMatcher hasColor(final String color) {
         this.color = is("color", color);
         return this;
     }
 
-    public TreeBoardDtoMatcher hasAccessibility(final Accessibility accessibility) {
+    public TreeCardDtoMatcher hasAccessibility(final Accessibility accessibility) {
         this.accessibility = is("accessibility", accessibility);
         return this;
     }
 
-    public TreeBoardDtoMatcher isEditable(final Boolean editable) {
+    public TreeCardDtoMatcher isEditable(final Boolean editable) {
         this.editable = is("editable", editable);
         return this;
     }
 
-    public TreeBoardDtoMatcher hasOwnerName(final String ownerName) {
+    public TreeCardDtoMatcher hasOwnerName(final String ownerName) {
         this.ownerName = is("ownerName", ownerName);
         return this;
     }

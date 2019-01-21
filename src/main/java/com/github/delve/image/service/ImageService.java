@@ -19,10 +19,12 @@ import java.time.LocalDateTime;
 public class ImageService {
 
     private final Path rootLocation;
+    private final String imageFilePrefix;
 
     @Autowired
-    public ImageService(@Value("${delve.resource.path.images}") final String imagesResourcePath) {
+    public ImageService(@Value("${delve.resource.path.images}") final String imagesResourcePath, @Value("${delve.image.file.prefix}") final String imageFilePrefix) {
         this.rootLocation = Paths.get(imagesResourcePath);
+        this.imageFilePrefix = imageFilePrefix;
     }
 
     public Resource loadFile(final String filename) {
@@ -62,6 +64,6 @@ public class ImageService {
         final int lastDotIndex = file.lastIndexOf('.');
         final String extension = file.substring(lastDotIndex);
 
-        return userTimeHash + extension;
+        return imageFilePrefix + userTimeHash + extension;
     }
 }

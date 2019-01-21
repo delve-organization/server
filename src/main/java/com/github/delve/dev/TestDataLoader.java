@@ -2,7 +2,7 @@ package com.github.delve.dev;
 
 import com.github.delve.component.node.service.NodeService;
 import com.github.delve.component.tree.service.TreeService;
-import com.github.delve.component.treeboard.service.TreeBoardService;
+import com.github.delve.component.treecard.service.TreeCardService;
 import com.github.delve.security.service.role.RoleService;
 import com.github.delve.security.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +19,17 @@ public class TestDataLoader {
     private final TreeService treeService;
     private final RoleService roleService;
     private final UserService userService;
-    private final TreeBoardService treeBoardService;
+    private final TreeCardService treeCardService;
     private final JwtAuthenticator jwtAuthenticator;
 
     @Autowired
     public TestDataLoader(final NodeService nodeService, final TreeService treeService, final RoleService roleService,
-                          final UserService userService, final TreeBoardService treeBoardService, final JwtAuthenticator jwtAuthenticator) {
+                          final UserService userService, final TreeCardService treeCardService, final JwtAuthenticator jwtAuthenticator) {
         this.nodeService = nodeService;
         this.treeService = treeService;
         this.roleService = roleService;
         this.userService = userService;
-        this.treeBoardService = treeBoardService;
+        this.treeCardService = treeCardService;
         this.jwtAuthenticator = jwtAuthenticator;
     }
 
@@ -41,7 +41,7 @@ public class TestDataLoader {
 
         NodeTestData.createTestData(nodeService);
         TreeTestData.createTestData(treeService);
-        TreeBoardTestData.createTestData(treeBoardService);
+        TreeCardTestData.createTestData(treeCardService);
 
         jwtAuthenticator.deAuthenticate();
     }

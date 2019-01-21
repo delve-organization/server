@@ -1,4 +1,4 @@
-package com.github.delve.component.treeboard.domain;
+package com.github.delve.component.treecard.domain;
 
 import com.github.delve.common.domain.Accessibility;
 
@@ -13,8 +13,8 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "TREE_BOARD")
-public class TreeBoard {
+@Table(name = "TREE_CARD")
+public class TreeCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,7 @@ public class TreeBoard {
     @Column(name = "ACCESSIBILITY", nullable = false)
     private Accessibility accessibility;
 
-    public TreeBoard(final Long treeId, final String title, final String description, final String imageName, final String color, final Long ownerId, final Accessibility accessibility) {
+    public TreeCard(final Long treeId, final String title, final String description, final String imageName, final String color, final Long ownerId, final Accessibility accessibility) {
         this.treeId = treeId;
         this.title = title;
         this.description = description;
@@ -53,7 +53,7 @@ public class TreeBoard {
         this.accessibility = accessibility;
     }
 
-    public TreeBoard() {
+    public TreeCard() {
     }
 
     public Long getId() {
@@ -122,7 +122,7 @@ public class TreeBoard {
 
     @Override
     public String toString() {
-        return "TreeBoard{" +
+        return "TreeCard{" +
                 "id=" + id +
                 ", treeId=" + treeId +
                 ", title='" + title + '\'' +
@@ -138,8 +138,8 @@ public class TreeBoard {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final TreeBoard treeBoard = (TreeBoard) o;
-        return Objects.equals(id, treeBoard.id);
+        final TreeCard treeCard = (TreeCard) o;
+        return Objects.equals(id, treeCard.id);
     }
 
     @Override

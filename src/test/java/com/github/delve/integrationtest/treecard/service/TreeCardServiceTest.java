@@ -1,16 +1,16 @@
-package com.github.delve.integrationtest.treeboard.service;
+package com.github.delve.integrationtest.treecard.service;
 
 import com.github.delve.common.domain.Accessibility;
-import com.github.delve.component.treeboard.dto.CreateTreeBoardCommand;
-import com.github.delve.component.treeboard.dto.DeleteTreeBoardCommand;
-import com.github.delve.component.treeboard.dto.EditTreeBoardCommand;
-import com.github.delve.component.treeboard.dto.TreeBoardDto;
-import com.github.delve.component.treeboard.repository.TreeBoardRepository;
-import com.github.delve.component.treeboard.service.TreeBoardService;
+import com.github.delve.component.treecard.dto.CreateTreeCardCommand;
+import com.github.delve.component.treecard.dto.DeleteTreeCardCommand;
+import com.github.delve.component.treecard.dto.EditTreeCardCommand;
+import com.github.delve.component.treecard.dto.TreeCardDto;
+import com.github.delve.component.treecard.repository.TreeCardRepository;
+import com.github.delve.component.treecard.service.TreeCardService;
 import com.github.delve.dev.JwtAuthenticator;
 import com.github.delve.integrationtest.SpringBootTestBase;
 import com.github.delve.integrationtest.tree.util.TreeBaseData;
-import com.github.delve.integrationtest.treeboard.util.TreeBoardBaseData;
+import com.github.delve.integrationtest.treecard.util.TreeCardBaseData;
 import com.github.delve.integrationtest.user.util.UserBaseData;
 import com.github.delve.integrationtest.util.auth.Authenticate;
 import com.github.delve.integrationtest.util.basedata.Preload;
@@ -26,22 +26,22 @@ import java.util.List;
 
 import static com.github.delve.common.domain.Accessibility.PRIVATE;
 import static com.github.delve.common.domain.Accessibility.PUBLIC;
-import static com.github.delve.dev.TreeBoardTestData.TREE_BOARD_0_ID;
-import static com.github.delve.dev.TreeBoardTestData.TREE_BOARD_1_ID;
-import static com.github.delve.dev.TreeBoardTestData.TREE_BOARD_2_ID;
-import static com.github.delve.dev.TreeBoardTestData.TREE_BOARD_3_ID;
+import static com.github.delve.dev.TreeCardTestData.TREE_CARD_0_ID;
+import static com.github.delve.dev.TreeCardTestData.TREE_CARD_1_ID;
+import static com.github.delve.dev.TreeCardTestData.TREE_CARD_2_ID;
+import static com.github.delve.dev.TreeCardTestData.TREE_CARD_3_ID;
 import static com.github.delve.dev.TreeTestData.TREE_0_ID;
 import static com.github.delve.dev.TreeTestData.TREE_1_ID;
-import static com.github.delve.integrationtest.treeboard.util.TreeBoardDtoMatcher.treeBoardDto;
+import static com.github.delve.integrationtest.treecard.util.TreeCardDtoMatcher.treeCardDto;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-public class TreeBoardServiceTest extends SpringBootTestBase {
+public class TreeCardServiceTest extends SpringBootTestBase {
 
     @Autowired
-    private TreeBoardService treeBoardService;
+    private TreeCardService treeCardService;
     @Autowired
-    private TreeBoardRepository treeBoardRepository;
+    private TreeCardRepository treeCardRepository;
     @Autowired
     private JwtAuthenticator jwtAuthenticator;
 
@@ -55,12 +55,12 @@ public class TreeBoardServiceTest extends SpringBootTestBase {
     @Authenticate(username = "user", password = "password")
     @UseBaseData(TreeBaseData.class)
     public void saveAnFindAllAvailable() {
-        final Long savedTreeBoardId = treeBoardService.save(new CreateTreeBoardCommand(TREE_0_ID, "Title", "description", "scifi_fantasy_books.png", "black", PRIVATE));
-        final List<TreeBoardDto> savedTreeBoards = treeBoardService.findAllAvailable();
+        final Long savedTreeCardId = treeCardService.save(new CreateTreeCardCommand(TREE_0_ID, "Title", "description", "scifi_fantasy_books.png", "black", PRIVATE));
+        final List<TreeCardDto> savedTreeCards = treeCardService.findAllAvailable();
 
-        assertEquals(savedTreeBoards.size(), 1);
-        assertThat(savedTreeBoards.get(0), treeBoardDto()
-                .hasId(savedTreeBoardId)
+        assertEquals(savedTreeCards.size(), 1);
+        assertThat(savedTreeCards.get(0), treeCardDto()
+                .hasId(savedTreeCardId)
                 .hasTreeId(TREE_0_ID)
                 .hasTitle("Title")
                 .hasDescription("description")
@@ -70,7 +70,7 @@ public class TreeBoardServiceTest extends SpringBootTestBase {
                 .isEditable(true)
                 .hasOwnerName("Test User"));
 
-        treeBoardRepository.deleteById(savedTreeBoardId);
+        treeCardRepository.deleteById(savedTreeCardId);
     }
 
     @Test(expected = IllegalStateException.class)
@@ -79,7 +79,7 @@ public class TreeBoardServiceTest extends SpringBootTestBase {
     @UseBaseData(TreeBaseData.class)
     public void otherUserCannotCreateWithPrivateTree() {
         jwtAuthenticator.authenticate("user", "password");
-        treeBoardService.save(new CreateTreeBoardCommand(TREE_1_ID, "Title", "description", "scifi_fantasy_books.png", "black", PRIVATE));
+        treeCardService.save(new CreateTreeCardCommand(TREE_1_ID, "Title", "description", "scifi_fantasy_books.png", "black", PRIVATE));
     }
 
     @Test
@@ -88,14 +88,14 @@ public class TreeBoardServiceTest extends SpringBootTestBase {
     @UseBaseData(TreeBaseData.class)
     public void adminCanEdit() {
         jwtAuthenticator.authenticate("user", "password");
-        final Long savedTreeBoardId = treeBoardService.save(new CreateTreeBoardCommand(TREE_0_ID, "Title", "description", "scifi_fantasy_books.png", "black", PRIVATE));
+        final Long savedTreeCardId = treeCardService.save(new CreateTreeCardCommand(TREE_0_ID, "Title", "description", "scifi_fantasy_books.png", "black", PRIVATE));
 
         jwtAuthenticator.authenticate("admin", "password");
-        final List<TreeBoardDto> savedTreeBoards = treeBoardService.findAllAvailable();
-        assertEquals(savedTreeBoards.size(), 1);
-        assertThat(savedTreeBoards.get(0), treeBoardDto().isEditable(true));
+        final List<TreeCardDto> savedTreeCards = treeCardService.findAllAvailable();
+        assertEquals(savedTreeCards.size(), 1);
+        assertThat(savedTreeCards.get(0), treeCardDto().isEditable(true));
 
-        treeBoardRepository.deleteById(savedTreeBoardId);
+        treeCardRepository.deleteById(savedTreeCardId);
     }
 
     @Test
@@ -104,34 +104,34 @@ public class TreeBoardServiceTest extends SpringBootTestBase {
     @UseBaseData(TreeBaseData.class)
     public void otherUserCannotEdit() {
         jwtAuthenticator.authenticate("admin", "password");
-        final Long savedTreeBoardId = treeBoardService.save(new CreateTreeBoardCommand(TREE_0_ID, "Title", "description", "scifi_fantasy_books.png", "black", PUBLIC));
+        final Long savedTreeCardId = treeCardService.save(new CreateTreeCardCommand(TREE_0_ID, "Title", "description", "scifi_fantasy_books.png", "black", PUBLIC));
 
         jwtAuthenticator.authenticate("user", "password");
-        final List<TreeBoardDto> savedTreeBoards = treeBoardService.findAllAvailable();
-        assertEquals(savedTreeBoards.size(), 1);
-        assertThat(savedTreeBoards.get(0), treeBoardDto().isEditable(false));
+        final List<TreeCardDto> savedTreeCards = treeCardService.findAllAvailable();
+        assertEquals(savedTreeCards.size(), 1);
+        assertThat(savedTreeCards.get(0), treeCardDto().isEditable(false));
 
-        treeBoardRepository.deleteById(savedTreeBoardId);
+        treeCardRepository.deleteById(savedTreeCardId);
     }
 
     @Test(expected = IllegalStateException.class)
     @Preload(UserBaseData.class)
     @Authenticate(username = "user", password = "password")
     public void treeNotFound() {
-        treeBoardService.save(new CreateTreeBoardCommand(TREE_0_ID, "Title", "description", "scifi_fantasy_books.png", "black", PRIVATE));
+        treeCardService.save(new CreateTreeCardCommand(TREE_0_ID, "Title", "description", "scifi_fantasy_books.png", "black", PRIVATE));
     }
 
     @Test
     @Preload(UserBaseData.class)
     @Authenticate(username = "admin", password = "password")
-    @UseBaseData(TreeBoardBaseData.class)
+    @UseBaseData(TreeCardBaseData.class)
     public void edit() {
-        final TreeBoardDto initialTreeBoard = treeBoardService.findById(TREE_BOARD_0_ID);
-        assertThat(initialTreeBoard, treeBoardDto()
-                .hasId(TREE_BOARD_0_ID)
+        final TreeCardDto initialTreeCard = treeCardService.findById(TREE_CARD_0_ID);
+        assertThat(initialTreeCard, treeCardDto()
+                .hasId(TREE_CARD_0_ID)
                 .hasTreeId(TREE_0_ID)
-                .hasTitle("Tree board title 1")
-                .hasDescription("Tree board description 1")
+                .hasTitle("tree card title 1")
+                .hasDescription("tree card description 1")
                 .hasImage("scifi_fantasy_books.png")
                 .hasImageUrl("http://localhost/images/scifi_fantasy_books.png")
                 .hasColor("black")
@@ -139,10 +139,10 @@ public class TreeBoardServiceTest extends SpringBootTestBase {
                 .isEditable(true)
                 .hasOwnerName("Admin"));
 
-        treeBoardService.edit(new EditTreeBoardCommand(TREE_BOARD_0_ID, TREE_1_ID, "New title", "New description", "fat_cat.png", "yellow", Accessibility.PRIVATE));
-        final TreeBoardDto editedTreeBoard = treeBoardService.findById(TREE_BOARD_0_ID);
-        assertThat(editedTreeBoard, treeBoardDto()
-                .hasId(TREE_BOARD_0_ID)
+        treeCardService.edit(new EditTreeCardCommand(TREE_CARD_0_ID, TREE_1_ID, "New title", "New description", "fat_cat.png", "yellow", Accessibility.PRIVATE));
+        final TreeCardDto editedTreeCard = treeCardService.findById(TREE_CARD_0_ID);
+        assertThat(editedTreeCard, treeCardDto()
+                .hasId(TREE_CARD_0_ID)
                 .hasTreeId(TREE_1_ID)
                 .hasTitle("New title")
                 .hasDescription("New description")
@@ -157,16 +157,16 @@ public class TreeBoardServiceTest extends SpringBootTestBase {
     @Test
     @Preload(UserBaseData.class)
     @Authenticate(username = "user", password = "password")
-    @UseBaseData(TreeBoardBaseData.class)
+    @UseBaseData(TreeCardBaseData.class)
     public void delete() {
-        final List<TreeBoardDto> initialTreeBoards = treeBoardService.findAllAvailable();
-        assertEquals(4, initialTreeBoards.size());
+        final List<TreeCardDto> initialTreeCards = treeCardService.findAllAvailable();
+        assertEquals(4, initialTreeCards.size());
 
-        treeBoardService.delete(new DeleteTreeBoardCommand(TREE_BOARD_0_ID));
-        treeBoardService.delete(new DeleteTreeBoardCommand(TREE_BOARD_1_ID));
-        final List<TreeBoardDto> modifiedTreeBoards = treeBoardService.findAllAvailable();
-        assertEquals(2, modifiedTreeBoards.size());
-        assertThat(modifiedTreeBoards.get(0), treeBoardDto().hasId(TREE_BOARD_2_ID));
-        assertThat(modifiedTreeBoards.get(1), treeBoardDto().hasId(TREE_BOARD_3_ID));
+        treeCardService.delete(new DeleteTreeCardCommand(TREE_CARD_0_ID));
+        treeCardService.delete(new DeleteTreeCardCommand(TREE_CARD_1_ID));
+        final List<TreeCardDto> modifiedTreeCards = treeCardService.findAllAvailable();
+        assertEquals(2, modifiedTreeCards.size());
+        assertThat(modifiedTreeCards.get(0), treeCardDto().hasId(TREE_CARD_2_ID));
+        assertThat(modifiedTreeCards.get(1), treeCardDto().hasId(TREE_CARD_3_ID));
     }
 }

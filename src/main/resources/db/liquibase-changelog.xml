@@ -12,5 +12,5 @@
     <include file="changelog/04-create-user-schema.xml" relativeToChangelogFile="true"/>
     <include file="changelog/05-create-user_role-schema.xml" relativeToChangelogFile="true"/>
     <include file="changelog/06-create-user_node_relation-schema.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/07-create-tree-board-schema.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/07-create-tree-card-schema.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

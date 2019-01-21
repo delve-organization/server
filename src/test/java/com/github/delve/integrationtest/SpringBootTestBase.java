@@ -2,7 +2,7 @@ package com.github.delve.integrationtest;
 
 import com.github.delve.integrationtest.node.util.NodeBaseData;
 import com.github.delve.integrationtest.tree.util.TreeBaseData;
-import com.github.delve.integrationtest.treeboard.util.TreeBoardBaseData;
+import com.github.delve.integrationtest.treecard.util.TreeCardBaseData;
 import com.github.delve.integrationtest.user.util.RoleBaseData;
 import com.github.delve.integrationtest.user.util.UserBaseData;
 import com.github.delve.integrationtest.util.auth.AuthenticateTestExecutionListener;
@@ -57,8 +57,8 @@ public abstract class SpringBootTestBase {
         }
 
         @Bean
-        public TreeBoardBaseData treeBoardBaseData() {
-            return new TreeBoardBaseData();
+        public TreeCardBaseData treeCardBaseData() {
+            return new TreeCardBaseData();
         }
 
         @Bean
