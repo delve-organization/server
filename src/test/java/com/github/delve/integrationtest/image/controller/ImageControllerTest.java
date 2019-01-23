@@ -29,7 +29,7 @@ public class ImageControllerTest extends SpringBootTestBase {
 
     @Test
     public void getImage() throws Exception {
-        mvc.perform(get("/images/fat_cat.png"))
+        mvc.perform(get("/public/images/fat_cat.png"))
                 .andExpect(status().isOk());
     }
 

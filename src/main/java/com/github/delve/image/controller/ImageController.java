@@ -28,7 +28,7 @@ public class ImageController {
         this.imageService = imageService;
     }
 
-    @GetMapping("/images/{filename:.+}")
+    @GetMapping("/public/images/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable final String filename) {
         final Resource file = imageService.loadFile(filename);
