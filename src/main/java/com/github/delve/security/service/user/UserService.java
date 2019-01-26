@@ -8,6 +8,8 @@ import com.github.delve.security.dto.CreateUserCommand;
 import com.github.delve.security.dto.UserDto;
 import com.github.delve.security.repository.UserRepository;
 import com.github.delve.security.service.role.RoleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final UserRepository userRepository;
     private final RoleService roleService;
@@ -54,7 +58,10 @@ public class UserService {
                 createRolesFromRoleNames(command.roles)
         );
 
-        return userRepository.save(user).getId();
+        final User savedUser = userRepository.save(user);
+
+        logger.info("Saved new user with id: {}", savedUser.getId());
+        return savedUser.getId();
     }
 
     public Page<UserDto> getUsers(final Pageable pageable) {
@@ -82,6 +89,9 @@ public class UserService {
                 }).collect(Collectors.toList());
 
         userRepository.saveAll(updatedUsers);
+        for (User user : updatedUsers) {
+            logger.info("Updated user with id: {}", user.getId());
+        }
     }
 
     private Set<Role> createRolesFromRoleNames(final Set<RoleName> names) {

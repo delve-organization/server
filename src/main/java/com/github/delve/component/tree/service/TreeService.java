@@ -9,6 +9,8 @@ import com.github.delve.component.tree.dto.TreeDto;
 import com.github.delve.component.tree.repository.TreeRepository;
 import com.github.delve.security.service.user.UserPrinciple;
 import com.github.delve.security.util.UserUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ import static java.util.Collections.singletonList;
 
 @Service
 public class TreeService {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final TreeRepository treeRepository;
     private final NodeRepository nodeRepository;
@@ -43,7 +47,10 @@ public class TreeService {
         }
 
         final Tree newTree = new Tree(optionalNode.get(), command.title, user.getId(), command.accessibility);
-        return treeRepository.save(newTree).getId();
+        final Tree savedTree = treeRepository.save(newTree);
+
+        logger.info("Saved new tree with id: {}", savedTree.getId());
+        return savedTree.getId();
     }
 
     public List<TreeDto> findAllAvailable() {

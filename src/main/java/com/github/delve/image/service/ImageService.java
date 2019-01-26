@@ -3,6 +3,8 @@ package com.github.delve.image.service;
 import com.github.delve.image.dto.SaveImageCommand;
 import com.github.delve.security.service.user.UserPrinciple;
 import com.github.delve.security.util.UserUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -17,6 +19,8 @@ import java.time.LocalDateTime;
 
 @Service
 public class ImageService {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final Path rootLocation;
     private final String imageFilePrefix;
@@ -49,6 +53,8 @@ public class ImageService {
         } catch (Exception e) {
             throw new RuntimeException(String.format("Could not save file %s.", generatedFileName));
         }
+
+        logger.info("Saved new image with name: {}", generatedFileName);
         return generatedFileName;
     }
 

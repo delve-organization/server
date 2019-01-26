@@ -13,6 +13,8 @@ import com.github.delve.component.treecard.repository.TreeCardRepository;
 import com.github.delve.security.service.user.UserPrinciple;
 import com.github.delve.security.service.user.UserService;
 import com.github.delve.security.util.UserUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,8 @@ import static java.util.Collections.singletonList;
 
 @Service
 public class TreeCardService {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final TreeCardRepository treeCardRepository;
     private final TreeService treeService;
@@ -48,7 +52,10 @@ public class TreeCardService {
 
         final TreeCard newTreeCard = new TreeCard(command.treeId, command.title, command.description,
                 command.imageName, command.color, user.getId(), command.accessibility);
-        return treeCardRepository.save(newTreeCard).getId();
+        final TreeCard savedTreeCard = treeCardRepository.save(newTreeCard);
+
+        logger.info("Saved new tree card with id: {}", savedTreeCard.getId());
+        return savedTreeCard.getId();
     }
 
     public List<TreeCardDto> findAllAvailable() {
@@ -77,12 +84,17 @@ public class TreeCardService {
         treeCard.setImageName(command.imageName);
         treeCard.setAccessibility(command.accessibility);
 
-        return treeCardRepository.save(treeCard).getId();
+        final TreeCard savedTreeCard = treeCardRepository.save(treeCard);
+
+        logger.info("Edited tree card with id: {}", savedTreeCard.getId());
+        return savedTreeCard.getId();
     }
 
     public void delete(final DeleteTreeCardCommand command) {
         final TreeCard treeCard = tryToFindByIdForEdit(command.treeCardId);
         treeCardRepository.delete(treeCard);
+
+        logger.info("Edited tree card with id: {}", command.treeCardId);
     }
 
     private TreeCardDto createDto(final TreeCard treeCard, final UserPrinciple user) {

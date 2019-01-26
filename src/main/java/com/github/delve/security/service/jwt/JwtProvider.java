@@ -18,7 +18,7 @@ import java.util.Date;
 @Component
 public class JwtProvider {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Value("${delve.app.jwtSecret}")
     private String jwtSecret;

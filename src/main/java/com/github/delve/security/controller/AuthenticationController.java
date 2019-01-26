@@ -8,6 +8,8 @@ import com.github.delve.security.dto.LoginRequest;
 import com.github.delve.common.dto.ResponseMessage;
 import com.github.delve.security.dto.SignUpRequest;
 import com.github.delve.security.service.jwt.JwtProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,8 @@ import static java.util.Collections.singletonList;
 @RequestMapping("auth")
 public class AuthenticationController {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final JwtProvider jwtProvider;
@@ -46,6 +50,8 @@ public class AuthenticationController {
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        logger.info("User {} authenticated", loginRequest.getUsername());
 
         final String jwt = jwtProvider.generateJwtToken(authentication);
         final UserDetails userDetails = (UserDetails) authentication.getPrincipal();

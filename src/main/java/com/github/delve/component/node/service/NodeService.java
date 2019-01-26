@@ -5,6 +5,8 @@ import com.github.delve.component.node.domain.Node;
 import com.github.delve.component.node.dto.CreateNodeCommand;
 import com.github.delve.component.node.dto.NodeDto;
 import com.github.delve.component.node.repository.NodeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class NodeService {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final NodeRepository nodeRepository;
     private final UserNodeRelationService userNodeRelationService;
@@ -37,7 +41,10 @@ public class NodeService {
             });
         }
 
-        return nodeRepository.save(newNode).getId();
+        final Node savedNode = nodeRepository.save(newNode);
+        logger.info("Saved new node with id: {}", savedNode.getId());
+
+        return savedNode.getId();
     }
 
     public NodeDto getNodesFromRoot(final Long rootNodeId) {
