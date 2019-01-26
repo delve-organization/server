@@ -1,10 +1,13 @@
 package com.github.delve.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -12,10 +15,22 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import java.lang.reflect.Method;
 
 @Configuration
-public class WebConfig {
+public class WebMvcConfig {
+
+    private final String apiBasePath;
+
+    @Autowired
+    public WebMvcConfig(@Value("${api.base-path}") final String apiBasePath) {
+        this.apiBasePath = apiBasePath;
+    }
 
     @Bean
-    public WebMvcRegistrations webMvcRegistrationsHandlerMapping(@Value("${api.base-path}") final String apiBasePath) {
+    public ServletRegistrationBean dispatcherRegistration(final WebApplicationContext ctx) {
+        return new ServletRegistrationBean<>(new LoggableDispatcherServlet(ctx, apiBasePath));
+    }
+
+    @Bean
+    public WebMvcRegistrations webMvcRegistrationsHandlerMapping() {
         return new WebMvcRegistrations() {
             @Override
             public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {

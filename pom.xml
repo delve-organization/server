@@ -135,6 +135,7 @@
                                 <exclude>**/domain/*</exclude>
                                 <exclude>**/dto/*</exclude>
                                 <exclude>**/dev/*</exclude>
+                                <exclude>**/config/*</exclude>
                             </excludes>
                         </configuration>
                     </execution>
@@ -163,6 +164,7 @@
                                         <exclude>**/domain/*</exclude>
                                         <exclude>**/dto/*</exclude>
                                         <exclude>**/dev/*</exclude>
+                                        <exclude>**/config/*</exclude>
                                     </excludes>
                                 </configuration>
                             </execution>
