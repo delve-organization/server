@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import javax.servlet.MultipartConfigElement;
 import java.lang.reflect.Method;
 
 @Configuration
@@ -26,7 +27,10 @@ public class WebMvcConfig {
 
     @Bean
     public ServletRegistrationBean dispatcherRegistration(final WebApplicationContext ctx) {
-        return new ServletRegistrationBean<>(new LoggableDispatcherServlet(ctx, apiBasePath));
+        final ServletRegistrationBean servletRegistration = new ServletRegistrationBean<>(new LoggableDispatcherServlet(ctx, apiBasePath));
+        servletRegistration.setMultipartConfig(new MultipartConfigElement("/"));
+
+        return servletRegistration;
     }
 
     @Bean
