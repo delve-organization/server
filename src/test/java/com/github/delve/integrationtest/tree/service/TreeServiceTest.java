@@ -1,5 +1,6 @@
 package com.github.delve.integrationtest.tree.service;
 
+import com.github.delve.common.exception.DelveException;
 import com.github.delve.component.tree.dto.CreateTreeCommand;
 import com.github.delve.component.tree.dto.TreeDto;
 import com.github.delve.component.tree.repository.TreeRepository;
@@ -81,7 +82,7 @@ public class TreeServiceTest extends SpringBootTestBase {
         treeRepository.deleteById(savedTreeId);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = DelveException.class)
     @Preload(UserBaseData.class)
     @Authenticate(username = "admin", password = "password")
     @UseBaseData(TreeBaseData.class)
@@ -90,7 +91,7 @@ public class TreeServiceTest extends SpringBootTestBase {
         treeService.findById(TREE_1_ID);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = DelveException.class)
     public void rootNodeNotFound() {
         treeService.save(new CreateTreeCommand(-1L, "title", PRIVATE));
     }

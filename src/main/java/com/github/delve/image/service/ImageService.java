@@ -1,5 +1,6 @@
 package com.github.delve.image.service;
 
+import com.github.delve.common.exception.DelveException;
 import com.github.delve.image.dto.SaveImageCommand;
 import com.github.delve.security.service.user.UserPrinciple;
 import com.github.delve.security.util.UserUtil;
@@ -38,10 +39,10 @@ public class ImageService {
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else {
-                throw new RuntimeException(String.format("Could not read file %s.", filename));
+                throw new DelveException("Could not read file %s.", filename);
             }
         } catch (MalformedURLException e) {
-            throw new RuntimeException(String.format("Could not create url for file %s.", filename));
+            throw new DelveException("Could not create url for file %s.", filename);
         }
     }
 
@@ -51,7 +52,7 @@ public class ImageService {
         try {
             Files.copy(command.file.getInputStream(), this.rootLocation.resolve(generatedFileName));
         } catch (Exception e) {
-            throw new RuntimeException(String.format("Could not save file %s.", generatedFileName));
+            throw new DelveException("Could not save file %s.", generatedFileName);
         }
 
         logger.info("Saved new image with name: {}", generatedFileName);

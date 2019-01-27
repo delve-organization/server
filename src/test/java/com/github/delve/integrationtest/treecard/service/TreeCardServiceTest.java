@@ -1,6 +1,7 @@
 package com.github.delve.integrationtest.treecard.service;
 
 import com.github.delve.common.domain.Accessibility;
+import com.github.delve.common.exception.DelveException;
 import com.github.delve.component.treecard.dto.CreateTreeCardCommand;
 import com.github.delve.component.treecard.dto.DeleteTreeCardCommand;
 import com.github.delve.component.treecard.dto.EditTreeCardCommand;
@@ -73,7 +74,7 @@ public class TreeCardServiceTest extends SpringBootTestBase {
         treeCardRepository.deleteById(savedTreeCardId);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = DelveException.class)
     @Preload(UserBaseData.class)
     @Authenticate(username = "admin", password = "password")
     @UseBaseData(TreeBaseData.class)
@@ -114,7 +115,7 @@ public class TreeCardServiceTest extends SpringBootTestBase {
         treeCardRepository.deleteById(savedTreeCardId);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = DelveException.class)
     @Preload(UserBaseData.class)
     @Authenticate(username = "user", password = "password")
     public void treeNotFound() {

@@ -1,6 +1,7 @@
 package com.github.delve.component.treecard.service;
 
 import com.github.delve.common.domain.Accessibility;
+import com.github.delve.common.exception.DelveException;
 import com.github.delve.common.util.MvcUrlCreator;
 import com.github.delve.component.tree.dto.TreeDto;
 import com.github.delve.component.tree.service.TreeService;
@@ -47,7 +48,7 @@ public class TreeCardService {
         final UserPrinciple user = UserUtil.currentUser();
         final TreeDto tree = treeService.findById(command.treeId);
         if (!tree.editable && !PUBLIC.equals(tree.accessibility)) {
-            throw new IllegalStateException(String.format("Can not saveFile tree card for tree id %s, because tree is not public and user is not owner of the tree.", tree.id));
+            throw new DelveException("Can not saveFile tree card for tree id %s, because tree is not public and user is not owner of the tree.", tree.id);
         }
 
         final TreeCard newTreeCard = new TreeCard(command.treeId, command.title, command.description,
@@ -119,7 +120,7 @@ public class TreeCardService {
     private TreeCard tryToFindById(final Long treeCardId) {
         final Optional<TreeCard> optionalTreeCard = treeCardRepository.findById(treeCardId);
         if (!optionalTreeCard.isPresent()) {
-            throw new IllegalStateException(String.format("Could not find tree card for id: %s.", treeCardId));
+            throw new DelveException("Could not find tree card for id: %s.", treeCardId);
         }
 
         return optionalTreeCard.get();
@@ -127,7 +128,7 @@ public class TreeCardService {
 
     private void checkEditable(final TreeCard treeCard, final UserPrinciple user) {
         if (!isAdmin(user) && !user.getId().equals(treeCard.getOwnerId())) {
-            throw new IllegalStateException("tree card is not owned by user.");
+            throw new DelveException("tree card is not owned by user.");
         }
     }
 }

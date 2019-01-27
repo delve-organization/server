@@ -1,5 +1,6 @@
 package com.github.delve.component.node.service;
 
+import com.github.delve.common.exception.DelveException;
 import com.github.delve.common.util.MvcUrlCreator;
 import com.github.delve.component.node.domain.Node;
 import com.github.delve.component.node.dto.CreateNodeCommand;
@@ -50,7 +51,7 @@ public class NodeService {
     public NodeDto getNodesFromRoot(final Long rootNodeId) {
         final Optional<Node> rootNode = nodeRepository.findById(rootNodeId);
         if (!rootNode.isPresent()) {
-            throw new IllegalStateException(String.format("Could not find root node for id %s", rootNodeId));
+            throw new DelveException("Could not find root node for id %s", rootNodeId);
         }
 
         return createDto(rootNode.get());

@@ -1,5 +1,6 @@
 package com.github.delve.integrationtest.node.service;
 
+import com.github.delve.common.exception.DelveException;
 import com.github.delve.component.node.dto.CreateNodeCommand;
 import com.github.delve.component.node.dto.NodeDto;
 import com.github.delve.component.node.service.NodeService;
@@ -60,7 +61,7 @@ public class NodeServiceTest extends SpringBootTestBase {
                 .hasImageUrl(null));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = DelveException.class)
     public void rootNodeNotFound() {
         nodeService.getNodesFromRoot(-1L);
     }

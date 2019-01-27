@@ -1,5 +1,6 @@
 package com.github.delve.integrationtest.user.service;
 
+import com.github.delve.common.exception.DelveException;
 import com.github.delve.component.admin.dto.UpdateUserRequest;
 import com.github.delve.integrationtest.SpringBootTestBase;
 import com.github.delve.integrationtest.user.util.UserBaseData;
@@ -136,14 +137,14 @@ public class UserServiceTest extends SpringBootTestBase {
         userRepository.deleteById(savedUserId);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = DelveException.class)
     @UseBaseData(UserBaseData.class)
     public void registerUserWithExistingUsernameTest() {
         final CreateUserCommand command = new CreateUserCommand("Sheldon", "admin", "sheldon@asd.com", "password", Collections.singleton(ROLE_USER));
         userService.save(command);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = DelveException.class)
     @UseBaseData(UserBaseData.class)
     public void registerUserWithExistingEmailTest() {
         final CreateUserCommand command = new CreateUserCommand("Sheldon", "sheldon", "admin@delve.com", "password", Collections.singleton(ROLE_USER));

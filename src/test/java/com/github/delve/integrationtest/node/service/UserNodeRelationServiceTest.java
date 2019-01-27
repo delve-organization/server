@@ -1,5 +1,6 @@
 package com.github.delve.integrationtest.node.service;
 
+import com.github.delve.common.exception.DelveException;
 import com.github.delve.component.node.dto.CreateNodeCommand;
 import com.github.delve.component.node.dto.CreateUserNodeRelationCommand;
 import com.github.delve.component.node.dto.UserNodeRelationDto;
@@ -44,7 +45,7 @@ public class UserNodeRelationServiceTest extends SpringBootTestBase {
         assertThat(afterRelations.get(0), UserNodeRelationDtoMatcher.userNodeRelationDtoMatcher().hasNodeId(LEVEL_2_0_ID).hasVisited(true));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = DelveException.class)
     @Preload(UserBaseData.class)
     @Authenticate(username = "user", password = "password")
     @UseBaseData(NodeBaseData.class)

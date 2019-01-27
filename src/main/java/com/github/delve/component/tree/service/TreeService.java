@@ -1,6 +1,7 @@
 package com.github.delve.component.tree.service;
 
 import com.github.delve.common.domain.Accessibility;
+import com.github.delve.common.exception.DelveException;
 import com.github.delve.component.node.domain.Node;
 import com.github.delve.component.node.repository.NodeRepository;
 import com.github.delve.component.tree.domain.Tree;
@@ -43,7 +44,7 @@ public class TreeService {
 
         final Optional<Node> optionalNode = nodeRepository.findById(command.rootNodeId);
         if (!optionalNode.isPresent()) {
-            throw new IllegalStateException(String.format("Could not find root node for id %s", command.rootNodeId));
+            throw new DelveException("Could not find root node for id %s", command.rootNodeId);
         }
 
         final Tree newTree = new Tree(optionalNode.get(), command.title, user.getId(), command.accessibility);
@@ -69,7 +70,7 @@ public class TreeService {
         final Optional<Tree> tree = treeRepository.findByIdByUserAndAccessibility(treeId, user.getId(), accessibilities);
 
         if (!tree.isPresent()) {
-            throw new IllegalStateException(String.format("Could not find tree for id %s", treeId));
+            throw new DelveException("Could not find tree for id %s", treeId);
         }
 
         return createDto(tree.get(), user);

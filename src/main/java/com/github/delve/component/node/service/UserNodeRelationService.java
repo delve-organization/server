@@ -1,5 +1,6 @@
 package com.github.delve.component.node.service;
 
+import com.github.delve.common.exception.DelveException;
 import com.github.delve.component.node.domain.Node;
 import com.github.delve.component.node.domain.UserNodeRelation;
 import com.github.delve.component.node.repository.NodeRepository;
@@ -44,12 +45,12 @@ public class UserNodeRelationService {
 
         final Optional<Node> optionalNode = nodeRepository.findById(command.getNodeId());
         if (!optionalNode.isPresent()) {
-            throw new IllegalStateException(String.format("Could not find root node for id %s", command.getNodeId()));
+            throw new DelveException("Could not find root node for id %s", command.getNodeId());
         }
 
         final Node node = optionalNode.get();
         if (!node.getChildren().isEmpty()) {
-            throw new IllegalStateException(String.format("Cannot set visited property for node (%d) because it is not a leaf node.", command.getNodeId()));
+            throw new DelveException("Cannot set visited property for node (%d) because it is not a leaf node.", command.getNodeId());
         }
 
         final Optional<UserNodeRelation> optionalRelation = userNodeRelationRepository
