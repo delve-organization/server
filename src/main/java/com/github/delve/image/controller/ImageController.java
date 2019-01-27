@@ -6,9 +6,6 @@ import com.github.delve.image.dto.SaveImageCommand;
 import com.github.delve.image.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,20 +27,17 @@ public class ImageController {
 
     @GetMapping("/public/images/{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> getFile(@PathVariable final String filename) {
-        final Resource file = imageService.loadFile(filename);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-                .body(file);
+    public Resource getFile(@PathVariable final String filename) {
+        return imageService.loadFile(filename);
     }
 
     @PostMapping("/api/images/upload")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @ResponseBody
-    public ResponseEntity<ImageUploadDto> uploadFile(@RequestParam("file") final MultipartFile file) {
+    public ImageUploadDto uploadFile(@RequestParam("file") final MultipartFile file) {
         final String imageName = imageService.saveFile(new SaveImageCommand(file));
         final String imageUrl = MvcUrlCreator.imageUrl(imageName);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ImageUploadDto(imageName, imageUrl));
+        return new ImageUploadDto(imageName, imageUrl);
     }
 }

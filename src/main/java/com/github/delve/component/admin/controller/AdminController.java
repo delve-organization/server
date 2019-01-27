@@ -1,7 +1,6 @@
 package com.github.delve.component.admin.controller;
 
 import com.github.delve.component.admin.dto.UpdateUserRequest;
-import com.github.delve.common.dto.ResponseMessage;
 import com.github.delve.config.RestApiController;
 import com.github.delve.security.dto.UserDto;
 import com.github.delve.security.service.user.UserService;
@@ -42,9 +41,7 @@ public class AdminController {
     }
 
     @PostMapping("/update-users")
-    public ResponseMessage updateUsers(@Valid @RequestBody final List<UpdateUserRequest> updateUserRequests) {
+    public void updateUsers(@Valid @RequestBody final List<UpdateUserRequest> updateUserRequests) {
         userService.updateUsers(updateUserRequests);
-
-        return new ResponseMessage("Users updated successfully");
     }
 }

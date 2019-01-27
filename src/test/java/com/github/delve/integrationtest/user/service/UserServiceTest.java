@@ -1,11 +1,12 @@
 package com.github.delve.integrationtest.user.service;
 
 import com.github.delve.component.admin.dto.UpdateUserRequest;
+import com.github.delve.integrationtest.SpringBootTestBase;
 import com.github.delve.integrationtest.user.util.UserBaseData;
 import com.github.delve.integrationtest.util.basedata.UseBaseData;
-import com.github.delve.integrationtest.SpringBootTestBase;
 import com.github.delve.security.domain.Role;
 import com.github.delve.security.domain.User;
+import com.github.delve.security.dto.CreateUserCommand;
 import com.github.delve.security.dto.UserDto;
 import com.github.delve.security.repository.UserRepository;
 import com.github.delve.security.service.user.UserService;
@@ -123,6 +124,30 @@ public class UserServiceTest extends SpringBootTestBase {
     public void getUserNameById() {
         final String adminName = userService.getUserNameById(ADMIN_ID);
         assertEquals(adminName, "Admin");
+    }
+
+    @Test
+    public void registerUserTest() {
+        final CreateUserCommand command = new CreateUserCommand("Sheldon", "sheldon", "sheldon@asd.com", "password", Collections.singleton(ROLE_USER));
+        final Long savedUserId = userService.save(command);
+
+        final boolean adminExists = userService.existsByUsername("sheldon");
+        assertTrue(adminExists);
+        userRepository.deleteById(savedUserId);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    @UseBaseData(UserBaseData.class)
+    public void registerUserWithExistingUsernameTest() {
+        final CreateUserCommand command = new CreateUserCommand("Sheldon", "admin", "sheldon@asd.com", "password", Collections.singleton(ROLE_USER));
+        userService.save(command);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    @UseBaseData(UserBaseData.class)
+    public void registerUserWithExistingEmailTest() {
+        final CreateUserCommand command = new CreateUserCommand("Sheldon", "sheldon", "admin@delve.com", "password", Collections.singleton(ROLE_USER));
+        userService.save(command);
     }
 
     private UserDto userToDto(final User user) {

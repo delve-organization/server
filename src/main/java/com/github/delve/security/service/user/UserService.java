@@ -50,6 +50,13 @@ public class UserService {
     }
 
     public Long save(final CreateUserCommand command) {
+        if (existsByUsername(command.username)) {
+            throw new IllegalStateException("Username is already taken!");
+        }
+        if (existsByEmail(command.email)) {
+            throw new IllegalStateException("Email is already taken!");
+        }
+
         final User user = new User(
                 command.name,
                 command.username,
