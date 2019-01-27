@@ -16,7 +16,6 @@
 
     <properties>
         <line.coverage.threshold>0.80</line.coverage.threshold>
-        <coveralls-maven-plugin.version>4.2.0</coveralls-maven-plugin.version>
         <coveralls-repo-token>bfDCCSOhsGCqzn4KNx8qdDVxI46GPQEg8</coveralls-repo-token>
     </properties>
 
