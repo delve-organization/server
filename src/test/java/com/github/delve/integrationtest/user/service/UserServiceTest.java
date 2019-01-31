@@ -137,20 +137,6 @@ public class UserServiceTest extends SpringBootTestBase {
         userRepository.deleteById(savedUserId);
     }
 
-    @Test(expected = DelveException.class)
-    @UseBaseData(UserBaseData.class)
-    public void registerUserWithExistingUsernameTest() {
-        final CreateUserCommand command = new CreateUserCommand("Sheldon", "admin", "sheldon@asd.com", "password", Collections.singleton(ROLE_USER));
-        userService.save(command);
-    }
-
-    @Test(expected = DelveException.class)
-    @UseBaseData(UserBaseData.class)
-    public void registerUserWithExistingEmailTest() {
-        final CreateUserCommand command = new CreateUserCommand("Sheldon", "sheldon", "admin@delve.com", "password", Collections.singleton(ROLE_USER));
-        userService.save(command);
-    }
-
     private UserDto userToDto(final User user) {
         return new UserDto(user.getId(), user.getName(), user.getUsername(), user.getEmail(),
                 user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));

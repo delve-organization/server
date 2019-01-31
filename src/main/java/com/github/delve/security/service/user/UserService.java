@@ -1,6 +1,5 @@
 package com.github.delve.security.service.user;
 
-import com.github.delve.common.exception.DelveException;
 import com.github.delve.component.admin.dto.UpdateUserRequest;
 import com.github.delve.security.domain.Role;
 import com.github.delve.security.domain.RoleName;
@@ -51,13 +50,6 @@ public class UserService {
     }
 
     public Long save(final CreateUserCommand command) {
-        if (existsByUsername(command.username)) {
-            throw new DelveException("Username is already taken!");
-        }
-        if (existsByEmail(command.email)) {
-            throw new DelveException("Email is already taken!");
-        }
-
         final User user = new User(
                 command.name,
                 command.username,

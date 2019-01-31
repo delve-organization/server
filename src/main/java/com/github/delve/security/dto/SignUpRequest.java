@@ -1,5 +1,8 @@
 package com.github.delve.security.dto;
 
+import com.github.delve.common.validator.EmailNotUsed;
+import com.github.delve.common.validator.UsernameNotUsed;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -12,11 +15,13 @@ public class SignUpRequest {
 
     @NotBlank
     @Size(min = 3, max = 50)
+    @UsernameNotUsed
     private String username;
 
     @NotBlank
     @Size(max = 60)
     @Email
+    @EmailNotUsed
     private String email;
 
     @NotBlank

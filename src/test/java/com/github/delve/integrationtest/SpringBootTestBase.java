@@ -1,15 +1,15 @@
 package com.github.delve.integrationtest;
 
+import com.github.delve.dev.JwtAuthenticator;
 import com.github.delve.integrationtest.node.util.NodeBaseData;
 import com.github.delve.integrationtest.tree.util.TreeBaseData;
 import com.github.delve.integrationtest.treecard.util.TreeCardBaseData;
 import com.github.delve.integrationtest.user.util.RoleBaseData;
 import com.github.delve.integrationtest.user.util.UserBaseData;
 import com.github.delve.integrationtest.util.auth.AuthenticateTestExecutionListener;
+import com.github.delve.integrationtest.util.basedata.BaseDataTestExecutionListener;
 import com.github.delve.integrationtest.util.basedata.PreloadTestExecutionListener;
 import com.github.delve.integrationtest.util.context.ContextProvider;
-import com.github.delve.dev.JwtAuthenticator;
-import com.github.delve.integrationtest.util.basedata.BaseDataTestExecutionListener;
 import com.github.delve.security.service.jwt.JwtProvider;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +19,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory;
+import org.springframework.web.context.WebApplicationContext;
+
+import javax.validation.Validator;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration
@@ -69,6 +74,17 @@ public abstract class SpringBootTestBase {
         @Bean
         public JwtAuthenticator jwtAuthenticator(final AuthenticationManager authenticationManager, final JwtProvider jwtProvider) {
             return new JwtAuthenticator(authenticationManager, jwtProvider);
+        }
+
+        @Bean
+        public Validator validator(final WebApplicationContext wac) {
+            final SpringConstraintValidatorFactory scvf = new SpringConstraintValidatorFactory(wac.getAutowireCapableBeanFactory());
+            final LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
+            validator.setConstraintValidatorFactory(scvf);
+            validator.setApplicationContext(wac);
+            validator.afterPropertiesSet();
+
+            return validator;
         }
     }
 }
