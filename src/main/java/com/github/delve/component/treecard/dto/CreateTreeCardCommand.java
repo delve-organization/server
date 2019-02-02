@@ -4,15 +4,12 @@ import com.github.delve.common.domain.Accessibility;
 
 public class CreateTreeCardCommand {
 
-    public Long treeId;
-    public String title;
-    public String description;
-    public String imageName;
-    public String color;
-    public Accessibility accessibility;
-
-    public CreateTreeCardCommand() {
-    }
+    public final Long treeId;
+    public final String title;
+    public final String description;
+    public final String imageName;
+    public final String color;
+    public final Accessibility accessibility;
 
     public CreateTreeCardCommand(final Long treeId, final String title, final String description, final String imageName, final String color, final Accessibility accessibility) {
         this.treeId = treeId;

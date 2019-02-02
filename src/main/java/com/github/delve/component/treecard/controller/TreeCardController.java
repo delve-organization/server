@@ -1,8 +1,11 @@
 package com.github.delve.component.treecard.controller;
 
 import com.github.delve.component.treecard.dto.CreateTreeCardCommand;
+import com.github.delve.component.treecard.dto.CreateTreeCardRequest;
 import com.github.delve.component.treecard.dto.DeleteTreeCardCommand;
+import com.github.delve.component.treecard.dto.DeleteTreeCardRequest;
 import com.github.delve.component.treecard.dto.EditTreeCardCommand;
+import com.github.delve.component.treecard.dto.EditTreeCardRequest;
 import com.github.delve.component.treecard.dto.TreeCardDto;
 import com.github.delve.component.treecard.service.TreeCardService;
 import com.github.delve.config.RestApiController;
@@ -34,19 +37,26 @@ public class TreeCardController {
     }
 
     @PostMapping("/create")
-    public TreeCardDto create(@Valid @RequestBody final CreateTreeCardCommand request) {
-        final Long savedTreeCardId = treeCardService.save(request);
+    public TreeCardDto create(@Valid @RequestBody final CreateTreeCardRequest request) {
+        final Long savedTreeCardId = treeCardService.save(new CreateTreeCardCommand(
+                request.getTreeId(), request.getTitle(), request.getDescription(),
+                request.getImageName(), request.getColor(), request.getAccessibility()
+        ));
         return treeCardService.findById(savedTreeCardId);
     }
 
     @PostMapping("/edit")
-    public TreeCardDto edit(@Valid @RequestBody final EditTreeCardCommand request) {
-        final Long savedTreeCardId = treeCardService.edit(request);
+    public TreeCardDto edit(@Valid @RequestBody final EditTreeCardRequest request) {
+        final Long savedTreeCardId = treeCardService.edit(new EditTreeCardCommand(
+                request.getTreeCardId(), request.getTreeId(), request.getTitle(),
+                request.getDescription(), request.getImageName(), request.getColor(),
+                request.getAccessibility()
+        ));
         return treeCardService.findById(savedTreeCardId);
     }
 
     @PostMapping("/delete")
-    public void delete(@Valid @RequestBody final DeleteTreeCardCommand request) {
-        treeCardService.delete(request);
+    public void delete(@Valid @RequestBody final DeleteTreeCardRequest request) {
+        treeCardService.delete(new DeleteTreeCardCommand(request.getTreeCardId()));
     }
 }

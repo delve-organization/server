@@ -2,10 +2,7 @@ package com.github.delve.component.treecard.dto;
 
 public class DeleteTreeCardCommand {
 
-    public Long treeCardId;
-
-    public DeleteTreeCardCommand() {
-    }
+    public final Long treeCardId;
 
     public DeleteTreeCardCommand(final Long treeCardId) {
         this.treeCardId = treeCardId;
