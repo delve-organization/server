@@ -1,13 +1,15 @@
 package com.github.delve.integrationtest.user.service;
 
-import com.github.delve.common.exception.DelveException;
 import com.github.delve.component.admin.dto.UpdateUserRequest;
 import com.github.delve.integrationtest.SpringBootTestBase;
 import com.github.delve.integrationtest.user.util.UserBaseData;
+import com.github.delve.integrationtest.util.auth.Authenticate;
+import com.github.delve.integrationtest.util.basedata.Preload;
 import com.github.delve.integrationtest.util.basedata.UseBaseData;
 import com.github.delve.security.domain.Role;
 import com.github.delve.security.domain.User;
 import com.github.delve.security.dto.CreateUserCommand;
+import com.github.delve.security.dto.EditUserCommand;
 import com.github.delve.security.dto.UserDto;
 import com.github.delve.security.repository.UserRepository;
 import com.github.delve.security.service.user.UserService;
@@ -135,6 +137,35 @@ public class UserServiceTest extends SpringBootTestBase {
         final boolean adminExists = userService.existsByUsername("sheldon");
         assertTrue(adminExists);
         userRepository.deleteById(savedUserId);
+    }
+
+    @Test
+    @Preload(UserBaseData.class)
+    @Authenticate(username = "admin", password = "password")
+    public void editUserTest() {
+        final EditUserCommand command = new EditUserCommand(ADMIN_ID, "nimdA");
+        final UserDto editedUserDto = userService.edit(command);
+
+        assertThat(editedUserDto, userDto()
+                .hasName("nimdA")
+                .hasUsername("admin")
+                .hasEmail("admin@delve.com")
+                .hasRoles(ROLE_USER, ROLE_ADMIN)
+        );
+    }
+
+    @Test
+    @Preload(UserBaseData.class)
+    @Authenticate(username = "admin", password = "password")
+    public void getUserTest() {
+        final UserDto adminDto = userService.getUser(ADMIN_ID);
+
+        assertThat(adminDto, userDto()
+                .hasName("Admin")
+                .hasUsername("admin")
+                .hasEmail("admin@delve.com")
+                .hasRoles(ROLE_ADMIN, ROLE_USER)
+        );
     }
 
     private UserDto userToDto(final User user) {

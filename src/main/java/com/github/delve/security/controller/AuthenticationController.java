@@ -6,7 +6,9 @@ import com.github.delve.security.dto.JwtResponse;
 import com.github.delve.security.dto.LoginRequest;
 import com.github.delve.security.dto.SignUpRequest;
 import com.github.delve.security.service.jwt.JwtProvider;
+import com.github.delve.security.service.user.UserPrinciple;
 import com.github.delve.security.service.user.UserService;
+import com.github.delve.security.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,26 +44,26 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signin")
-    public JwtResponse authenticateUser(@Valid @RequestBody final LoginRequest loginRequest) {
+    public JwtResponse authenticateUser(@Valid @RequestBody final LoginRequest request) {
         final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        logger.info("User {} authenticated", loginRequest.getUsername());
+        logger.info("User {} authenticated", request.getUsername());
 
         final String jwt = jwtProvider.generateJwtToken(authentication);
-        final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        final UserPrinciple userPrinciple = UserUtil.currentUser();
 
-        return new JwtResponse(jwt, userDetails.getUsername(), userDetails.getAuthorities());
+        return new JwtResponse(jwt, userPrinciple.getId(), userPrinciple.getUsername(), userPrinciple.getAuthorities());
     }
 
     @PostMapping("/signup")
-    public void registerUser(@Valid @RequestBody final SignUpRequest signUpRequest) {
+    public void registerUser(@Valid @RequestBody final SignUpRequest request) {
         userService.save(new CreateUserCommand(
-                signUpRequest.getName(),
-                signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                signUpRequest.getPassword(),
+                request.getName(),
+                request.getUsername(),
+                request.getEmail(),
+                request.getPassword(),
                 new HashSet<>(singletonList(ROLE_USER))));
     }
 }

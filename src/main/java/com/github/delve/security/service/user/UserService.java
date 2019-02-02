@@ -1,10 +1,12 @@
 package com.github.delve.security.service.user;
 
+import com.github.delve.common.exception.DelveException;
 import com.github.delve.component.admin.dto.UpdateUserRequest;
 import com.github.delve.security.domain.Role;
 import com.github.delve.security.domain.RoleName;
 import com.github.delve.security.domain.User;
 import com.github.delve.security.dto.CreateUserCommand;
+import com.github.delve.security.dto.EditUserCommand;
 import com.github.delve.security.dto.UserDto;
 import com.github.delve.security.repository.UserRepository;
 import com.github.delve.security.service.role.RoleService;
@@ -64,14 +66,32 @@ public class UserService {
         return savedUser.getId();
     }
 
+    public UserDto edit(final EditUserCommand command) {
+        final Optional<User> optionalUser = userRepository.findById(command.userId);
+        if (!optionalUser.isPresent()) {
+            throw new DelveException("Could not find user with id: ", command.userId);
+        }
+
+        final User user = optionalUser.get();
+        user.setName(command.name);
+
+        final User savedUser = userRepository.save(user);
+
+        logger.info("Edited user with id: {}", savedUser.getId());
+        return userToDto(savedUser);
+    }
+
+    public UserDto getUser(final Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (!optionalUser.isPresent()) {
+            throw new DelveException("Could not find user with id: ", userId);
+        }
+
+        return userToDto(optionalUser.get());
+    }
+
     public Page<UserDto> getUsers(final Pageable pageable) {
-        return userRepository.findAll(pageable).map(user -> new UserDto(
-                user.getId(),
-                user.getName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()))
-        );
+        return userRepository.findAll(pageable).map(this::userToDto);
     }
 
     public void updateUsers(final List<UpdateUserRequest> requests) {
@@ -100,6 +120,15 @@ public class UserService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet());
+    }
+
+    private UserDto userToDto(final User user) {
+        return new UserDto(
+                user.getId(),
+                user.getName(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
     }
 
     private static class UserAndRequest {
