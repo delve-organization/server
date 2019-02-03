@@ -6,6 +6,7 @@ import com.github.delve.component.treecard.service.TreeCardService;
 import com.github.delve.security.service.role.RoleService;
 import com.github.delve.security.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Profile("dev")
 public class TestDataLoader {
+
+    @Value("${delve.app.load-test-data}")
+    private boolean loadTestData;
 
     private final NodeService nodeService;
     private final TreeService treeService;
@@ -35,14 +39,16 @@ public class TestDataLoader {
 
     @EventListener(ApplicationReadyEvent.class)
     public void createTestData() {
-        RoleTestData.createTestData(roleService);
-        UserTestData.createTestData(userService);
-        jwtAuthenticator.authenticate("admin", "password");
+        if (loadTestData) {
+            RoleTestData.createTestData(roleService);
+            UserTestData.createTestData(userService);
+            jwtAuthenticator.authenticate("admin", "password");
 
-        NodeTestData.createTestData(nodeService);
-        TreeTestData.createTestData(treeService);
-        TreeCardTestData.createTestData(treeCardService);
+            NodeTestData.createTestData(nodeService);
+            TreeTestData.createTestData(treeService);
+            TreeCardTestData.createTestData(treeCardService);
 
-        jwtAuthenticator.deAuthenticate();
+            jwtAuthenticator.deAuthenticate();
+        }
     }
 }
