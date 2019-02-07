@@ -16,9 +16,6 @@ import org.springframework.stereotype.Component;
 @Profile("dev")
 public class TestDataLoader {
 
-    @Value("${delve.app.load-test-data}")
-    private boolean loadTestData;
-
     private final NodeService nodeService;
     private final TreeService treeService;
     private final RoleService roleService;
@@ -39,16 +36,14 @@ public class TestDataLoader {
 
     @EventListener(ApplicationReadyEvent.class)
     public void createTestData() {
-        if (loadTestData) {
-            RoleTestData.createTestData(roleService);
-            UserTestData.createTestData(userService);
-            jwtAuthenticator.authenticate("admin", "password");
+        RoleTestData.createTestData(roleService);
+        UserTestData.createTestData(userService);
+        jwtAuthenticator.authenticate("admin", "password");
 
-            NodeTestData.createTestData(nodeService);
-            TreeTestData.createTestData(treeService);
-            TreeCardTestData.createTestData(treeCardService);
+        NodeTestData.createTestData(nodeService);
+        TreeTestData.createTestData(treeService);
+        TreeCardTestData.createTestData(treeCardService);
 
-            jwtAuthenticator.deAuthenticate();
-        }
+        jwtAuthenticator.deAuthenticate();
     }
 }
