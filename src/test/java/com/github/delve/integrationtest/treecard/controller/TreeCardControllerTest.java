@@ -1,9 +1,9 @@
 package com.github.delve.integrationtest.treecard.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.delve.component.treecard.dto.CreateTreeCardCommand;
-import com.github.delve.component.treecard.dto.DeleteTreeCardCommand;
-import com.github.delve.component.treecard.dto.EditTreeCardCommand;
+import com.github.delve.component.treecard.dto.CreateTreeCardRequest;
+import com.github.delve.component.treecard.dto.DeleteTreeCardRequest;
+import com.github.delve.component.treecard.dto.EditTreeCardRequest;
 import com.github.delve.dev.JwtAuthenticator;
 import com.github.delve.integrationtest.SpringBootTestBase;
 import com.github.delve.integrationtest.treecard.util.TreeCardBaseData;
@@ -53,7 +53,13 @@ public class TreeCardControllerTest extends SpringBootTestBase {
     @UseBaseData(TreeCardBaseData.class)
     public void create() throws Exception {
         final String token = jwtAuthenticator.generateToken();
-        final CreateTreeCardCommand request = new CreateTreeCardCommand(TREE_0_ID, "Title", "Description", "fat_cat.png", "red", PUBLIC);
+        final CreateTreeCardRequest request = new CreateTreeCardRequest();
+        request.setTreeId(TREE_0_ID);
+        request.setTitle("Title");
+        request.setDescription("Description");
+        request.setImageName("fat_cat.png");
+        request.setColor("red");
+        request.setAccessibility(PUBLIC);
 
         mvc.perform(post("/api/tree-card/create")
                 .header("Authorization", "Bearer " + token)
@@ -68,7 +74,14 @@ public class TreeCardControllerTest extends SpringBootTestBase {
     @UseBaseData(TreeCardBaseData.class)
     public void edit() throws Exception {
         final String token = jwtAuthenticator.generateToken();
-        final EditTreeCardCommand request = new EditTreeCardCommand(TREE_CARD_0_ID, TREE_0_ID, "Title", "Description", "fat_cat.png", "yellow", PUBLIC);
+        final EditTreeCardRequest request = new EditTreeCardRequest();
+        request.setTreeCardId(TREE_CARD_0_ID);
+        request.setTreeId(TREE_0_ID);
+        request.setTitle("Title");
+        request.setDescription("Description");
+        request.setImageName("fat_cat.png");
+        request.setColor("yellow");
+        request.setAccessibility(PUBLIC);
 
         mvc.perform(post("/api/tree-card/edit")
                 .header("Authorization", "Bearer " + token)
@@ -83,7 +96,8 @@ public class TreeCardControllerTest extends SpringBootTestBase {
     @UseBaseData(TreeCardBaseData.class)
     public void delete() throws Exception {
         final String token = jwtAuthenticator.generateToken();
-        final DeleteTreeCardCommand request = new DeleteTreeCardCommand(TREE_CARD_0_ID);
+        final DeleteTreeCardRequest request = new DeleteTreeCardRequest();
+        request.setTreeCardId(TREE_CARD_0_ID);
 
         mvc.perform(post("/api/tree-card/delete")
                 .header("Authorization", "Bearer " + token)
